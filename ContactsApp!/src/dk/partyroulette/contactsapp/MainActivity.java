@@ -6,14 +6,17 @@ import android.app.ActionBar.TabListener;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.widget.LinearLayout;
 
 
-public class MainActivity extends Activity
+public class MainActivity extends Activity implements OnClickListener
 {
 	
 	@Override
@@ -24,30 +27,32 @@ public class MainActivity extends Activity
 
 		ActionBar actionBar = getActionBar();		
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-	    actionBar.setDisplayShowTitleEnabled(false);
 
-		
-		Tab tabAll = actionBar.newTab()
-	            .setText("All Contacts")
-	            .setTabListener(new MyTabListener(R.layout.list_view_all));
-	    actionBar.addTab(tabAll);
-	    
-	    Tab tabFavourites = actionBar.newTab()
-	            .setText("Favourites")
-	            .setTabListener(new MyTabListener(R.layout.list_view_favourites));
-	    actionBar.addTab(tabFavourites);
-	    
-	    Tab tabNetwork = actionBar.newTab()
-	            .setText("Network")
-	            .setTabListener(new MyTabListener(R.layout.list_view_network));
-	    actionBar.addTab(tabNetwork);
-	    
-	    Tab tabFamily = actionBar.newTab()
-	            .setText("Family")
-	            .setTabListener(new MyTabListener(R.layout.list_view_family));
-	    actionBar.addTab(tabFamily);
+		addTab("All Contacts", R.layout.list_view_all, actionBar);
+		addTab("Favourites", R.layout.list_view_favourites, actionBar);
+		addTab("Colleagues", R.layout.list_view_network, actionBar);
+		addTab("Family", R.layout.list_view_family, actionBar);
+	}
+	
+	private void addTab(String text, int viewId, ActionBar actionBar)
+	{
+		Tab tab = actionBar.newTab()
+	            .setText(text)
+	            .setTabListener(new MyTabListener(viewId));
+	    actionBar.addTab(tab);
 	}
 
-	
+	@Override
+	public void onClick(View clicked) 
+	{
+	    startActivity(new Intent(this, ContactActivity.class));
+	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.options, menu);
+	    return true;
+	}
 }

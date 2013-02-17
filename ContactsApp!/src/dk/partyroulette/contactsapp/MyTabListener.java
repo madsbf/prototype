@@ -5,6 +5,7 @@ import android.app.ActionBar.TabListener;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Bundle;
+import android.widget.LinearLayout;
 
 public class MyTabListener implements TabListener 
 {
@@ -24,12 +25,14 @@ public class MyTabListener implements TabListener
 	@Override
 	public void onTabSelected(Tab tab, FragmentTransaction ft) 
 	{
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
 		ft.replace(R.id.fragmentContainer, fragment);
 	}
 
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) 
 	{
+		ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
 		ft.remove(fragment);
 	}
 

@@ -59,7 +59,7 @@
             android:id="@+id/TextView03"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status: Busy"
+            android:text="Status: Available"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <LinearLayout
@@ -78,7 +78,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="&quot;I&apos;m eating pie!&quot;"
+                android:text="&quot;Gotta get down on friday!&quot;"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
         </LinearLayout>
