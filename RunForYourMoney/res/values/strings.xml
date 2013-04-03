@@ -2,7 +2,12 @@
 <resources>
 
     <string name="app_name">Run For Your Money</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="title_challenge_detail">Challenge Detail</string>
+    <string name="title_challenge_add">Add Challenge</string>
+    
+    <string-array name="challenge_types">
+        <item>Run</item>
+        <item>Whereabouts</item>
+    </string-array>
 
 </resources>
