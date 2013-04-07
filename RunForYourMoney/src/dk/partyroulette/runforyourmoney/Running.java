@@ -12,6 +12,7 @@ import android.os.Bundle;
 public class Running extends Activity implements VerificationMethod{
 	private LocationManager locationManager;
 	private ArrayList<ArrayList<Float>> gpsData;
+	private boolean paused = false;
 
 	public Running() {
 	}
@@ -24,13 +25,24 @@ public class Running extends Activity implements VerificationMethod{
 		Location location = locationManager.getLastKnownLocation("network");
 		//receive location updates
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
+		paused = false;
+	}
+	
+	public void pause() {
+		if(paused)
+		{
+			paused = false;
+		} else {
+			paused = true;
+		}
 	}
 
 	@Override
 	public void end() {
 		//stop receiving updates
 		locationManager.removeUpdates(locationListener);
+		//prepare dataobject
+		
 	}
 
 	@Override
@@ -43,7 +55,7 @@ public class Running extends Activity implements VerificationMethod{
 		@Override
 		public void onLocationChanged(Location location) {
 			//add to database
-			if(location!=null)
+			if(location!=null && !paused)
 			{
 				float lat = (float) location.getLatitude();
 				float lng = (float) location.getLongitude();
