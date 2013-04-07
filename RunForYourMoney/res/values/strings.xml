@@ -9,5 +9,6 @@
         <item>Run</item>
         <item>Whereabouts</item>
     </string-array>
+    <string name="action_settings">Action settings????</string>
 
 </resources>
