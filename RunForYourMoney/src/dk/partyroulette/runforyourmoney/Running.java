@@ -42,7 +42,7 @@ public class Running extends Activity implements VerificationMethod{
 		//stop receiving updates
 		locationManager.removeUpdates(locationListener);
 		//prepare dataobject
-		
+		RunObject ro = new RunObject(gpsData);
 	}
 
 	@Override
