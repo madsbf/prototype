@@ -1,10 +1,13 @@
 package dk.partyroulette.runforyourmoney;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -18,7 +21,8 @@ import dk.partyroulette.runforyourmoney.DummyContent;
  * either contained in a {@link ChallengeListActivity} in two-pane mode (on
  * tablets) or a {@link ChallengeDetailActivity} on handsets.
  */
-public class ChallengeDetailFragment extends Fragment {
+public class ChallengeDetailFragment extends Fragment implements OnClickListener
+{
 	/**
 	 * The fragment argument representing the item ID that this fragment
 	 * represents.
@@ -29,6 +33,8 @@ public class ChallengeDetailFragment extends Fragment {
 	 * The dummy content this fragment is presenting.
 	 */
 	private Challenge mItem;
+	
+	private Button startButton;
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -65,7 +71,21 @@ public class ChallengeDetailFragment extends Fragment {
 			((ProgressBar) rootView.findViewById(R.id.friendProgressBar))
 			.setProgress(mItem.getFriendProgress());
 		}
+		
+		startButton = (Button) rootView.findViewById(R.id.buttonStart);
+		startButton.setOnClickListener(this);
 
 		return rootView;
+	}
+
+	@Override
+	public void onClick(View view) 
+	{
+		if(view.getId() == R.id.buttonStart)
+		{
+			Intent intent = new Intent(getActivity(), RunStatisticsActivity.class);
+		    startActivity(intent);
+		}
+		
 	}
 }

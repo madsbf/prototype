@@ -48,14 +48,12 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@id/textFriendProgress" />
 
-    <ToggleButton
-        android:id="@+id/toggleButton1"
+    <Button
+        android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/friendProgressBar"
-        android:layout_centerInParent="true"
-        android:text="Start"
-        android:textOff="Start"
-        android:textOn="Stop" />
+        android:layout_centerHorizontal="true"
+        android:text="Start" />
 
 </RelativeLayout>

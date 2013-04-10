@@ -54,9 +54,11 @@
                 android:value=".ChallengeListActivity" />
         </activity>
         
+        <activity android:name="RunStatisticsActivity"></activity>
+        
         <meta-data
     android:name="com.google.android.maps.v2.API_KEY"
-    android:value="AIzaSyAP8IuXXmeeBFnZxY6_-20ET_-S8akgivs"/>
+    android:value="AIzaSyA54mIUckXGoEr68rI0x9jdUXGD_VDG8_E"/>
     </application>
 	
 </manifest>
