@@ -1,13 +1,16 @@
 package dk.partyroulette.runforyourmoney;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -17,9 +20,9 @@ public class ChallengeListAdapter extends ArrayAdapter<Challenge> {
 	private List<Challenge> objects;
 
 	/* here we must override the constructor for ArrayAdapter
-	* the only variable we care about now is ArrayList<Item> objects,
-	* because it is the list of objects we want to display.
-	*/
+	 * the only variable we care about now is ArrayList<Item> objects,
+	 * because it is the list of objects we want to display.
+	 */
 	public ChallengeListAdapter(Context context, int textViewResourceId, List<Challenge> objects) {
 		super(context, textViewResourceId, objects);
 		this.objects = objects;
@@ -55,20 +58,67 @@ public class ChallengeListAdapter extends ArrayAdapter<Challenge> {
 			// This is how you obtain a reference to the TextViews.
 			// These TextViews are created in the XML files we defined.
 
-			TextView nameView = (TextView) v.findViewById(R.id.textName);
+			TextView textName = (TextView) v.findViewById(R.id.textName);
 			ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+			TextView textType = (TextView) v.findViewById(R.id.textType);
+			TextView textUpperBound = (TextView) v.findViewById(R.id.textUpperBound);
+			TextView textLowerBound = (TextView) v.findViewById(R.id.textLowerBound);
+			LinearLayout layoutParticipants = (LinearLayout) v.findViewById(R.id.layoutParticipants);
 
 			// check to see if each individual textview is null.
 			// if not, assign some text!
-			if (nameView != null){
-				nameView.setText(challenge.getName());
+			if (textName != null){
+				textName.setText(challenge.getName());
 				progressBar.setProgress(challenge.getProgress());
+				textType.setText(challenge.getTypeName());
+				textUpperBound.setText(String.valueOf(challenge.getRepetition().getAmount()));
+				textLowerBound.setText("0");
 			}
+
+			new ImageLoader(layoutParticipants).execute(challenge.getParticipants());
 		}
 
 		// the view must be returned to our activity
 		return v;
-
 	}
 
+	private class ImageLoader extends AsyncTask<Participant, Void, Bitmap[]>
+	{
+		private LinearLayout parent;
+		
+		public ImageLoader(LinearLayout parent)
+		{
+			super();
+			this.parent = parent;
+		}
+
+		@Override
+		protected Bitmap[] doInBackground(Participant... participants) {
+
+			if(participants.length > 0)
+			{
+				Bitmap[] bitmaps = new Bitmap[participants.length];
+
+				for(int i = 0; i < participants.length; i++)
+				{
+					bitmaps[i] = BitmapUtilities.loadBitmap(participants[i].getImageUrl());
+				}
+
+				return bitmaps;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap[] bitmaps) 
+		{
+			for(Bitmap bitmap : bitmaps)
+			{
+				ImageView imageView = new ImageView(getContext());
+				imageView.setImageBitmap(bitmap);
+				parent.addView(imageView);
+			}
+		}
+
+	}
 }

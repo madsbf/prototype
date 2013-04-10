@@ -21,13 +21,30 @@ public class Challenge {
 	
 	private String description;
 	
-	public Challenge(long id, String name, int progress, int friendProgress, String description)
+	public Challenge(long id, String name, int progress, int friendProgress, String description, Repetition repetition, Participant[] participants)
 	{
 		this.id = id;
 		this.name = name;
 		this.progress = progress;
 		this.friendProgress = friendProgress;
 		this.description = description;
+		this.repetition = repetition;
+		this.participants = participants;
+	}
+	
+	public Participant[] getParticipants()
+	{
+		return participants;
+	}
+	
+	public Repetition getRepetition()
+	{
+		return repetition;
+	}
+	
+	public String getTypeName()
+	{
+		return "Running Challenge";
 	}
 	
 	public String getDescription()
