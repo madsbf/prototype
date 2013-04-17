@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:padding="6dip" >
+    android:padding="6dip" 
+    android:orientation="vertical">
 
     <!-- Item Name -->
 
@@ -18,42 +19,27 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textMyProgress"
+        android:id="@+id/textProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/textName"
-        android:text="My Progress"
+        android:text="Progress:"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <ProgressBar
-        android:id="@+id/myProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textMyProgress" />
-
-    <TextView
-        android:id="@+id/textFriendProgress"
+    <LinearLayout
+        android:id="@+id/layoutProgress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/myProgressBar"
-        android:text="Du Nguyen&apos;s progress"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:orientation="vertical" >
 
-    <ProgressBar
-        android:id="@+id/friendProgressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/textFriendProgress" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/buttonStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/friendProgressBar"
+        android:layout_below="@id/textProgress"
         android:layout_centerHorizontal="true"
         android:text="Start" />
 
-</RelativeLayout>
+</LinearLayout>

@@ -1,6 +1,10 @@
 package dk.partyroulette.runforyourmoney;
 
+import java.util.ArrayList;
+
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +12,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -66,16 +72,89 @@ public class ChallengeDetailFragment extends Fragment implements OnClickListener
 		if (mItem != null) {
 			((TextView) rootView.findViewById(R.id.textName))
 					.setText(mItem.getName());
-			((ProgressBar) rootView.findViewById(R.id.myProgressBar))
-			.setProgress(mItem.getProgress());
-			((ProgressBar) rootView.findViewById(R.id.friendProgressBar))
-			.setProgress(mItem.getFriendProgress());
+			
+			LinearLayout layoutProgress = (LinearLayout) rootView.findViewById(R.id.layoutProgress);
+			
+			LinearLayout[] participantViews = new LinearLayout[mItem.getParticipants().length];
+			for(int i = 0; i < mItem.getParticipants().length; i++)
+			{
+				LinearLayout participantView = (LinearLayout) inflater.inflate(R.layout.participant,
+						container, false);
+				
+				TextView textUpperBound = (TextView) participantView.findViewById(R.id.textUpperBound);
+				TextView textLowerBound = (TextView) participantView.findViewById(R.id.textLowerBound);
+				
+				textUpperBound.setText(String.valueOf(mItem.getRepetition().getAmount()));
+				textLowerBound.setText("0");
+				
+				layoutProgress.addView(participantView);
+				participantViews[i] = participantView;
+			}
+			
+			new ImageLoader(participantViews).execute(mItem.getParticipants());
 		}
 		
 		startButton = (Button) rootView.findViewById(R.id.buttonStart);
 		startButton.setOnClickListener(this);
 
 		return rootView;
+	}
+	
+	private class ImageLoader extends AsyncTask<Participant, Void, Bitmap[]>
+	{
+		private LinearLayout[] parents;
+		ArrayList<Participant> sortedParticipants;
+		
+		public ImageLoader(LinearLayout[] parents)
+		{
+			super();
+			this.parents = parents;
+		}
+
+		@Override
+		protected Bitmap[] doInBackground(Participant... participants) {
+
+			if(participants.length > 0)
+			{
+				sortedParticipants = new ArrayList<Participant>();
+				sortedParticipants.add(participants[0]);
+				for(int i = 1; i < participants.length; i++)
+				{
+					int j = 1;
+					while(i >= j && participants[i].getProgress() > sortedParticipants.get(i - j).getProgress())
+					{
+						j++;
+					}
+					sortedParticipants.add(i - j + 1, participants[i]);
+				}
+				
+				Bitmap[] bitmaps = new Bitmap[participants.length];
+
+				for(int i = 0; i < participants.length; i++)
+				{
+					bitmaps[i] = BitmapUtilities.loadBitmap(sortedParticipants.get(i).getImageUrl());
+				}
+
+				return bitmaps;
+			}
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap[] bitmaps) 
+		{
+			for(int i = 0; i < bitmaps.length; i++)
+			{
+				Bitmap fixedBitmap = BitmapUtilities.roundCornersBitmap(Bitmap.createScaledBitmap(BitmapUtilities.cropBitmap(bitmaps[i]), 100, 100, false));
+				
+				ProgressBar progressBar = (ProgressBar) parents[i].findViewById(R.id.progressBar);
+				ImageView imageParticipant = (ImageView) parents[i].findViewById(R.id.imageParticipant);
+				
+				progressBar.setProgress(sortedParticipants.get(i).getProgress());
+				imageParticipant.setImageBitmap(fixedBitmap);
+			}
+		}
+
 	}
 
 	@Override

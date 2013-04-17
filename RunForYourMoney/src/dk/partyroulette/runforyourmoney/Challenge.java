@@ -16,17 +16,12 @@ public class Challenge {
 	
 	private String name;
 	
-	private int progress;
-	private int friendProgress;
-	
 	private String description;
 	
-	public Challenge(long id, String name, int progress, int friendProgress, String description, Repetition repetition, Participant[] participants)
+	public Challenge(long id, String name, String description, Repetition repetition, Participant[] participants)
 	{
 		this.id = id;
 		this.name = name;
-		this.progress = progress;
-		this.friendProgress = friendProgress;
 		this.description = description;
 		this.repetition = repetition;
 		this.participants = participants;
@@ -52,11 +47,6 @@ public class Challenge {
 		return description;
 	}
 	
-	public int getFriendProgress()
-	{
-		return friendProgress;
-	}
-	
 	public String getName()
 	{
 		return name;
@@ -65,11 +55,6 @@ public class Challenge {
 	public Long getId()
 	{
 		return id;
-	}
-	
-	public int getProgress()
-	{
-		return progress;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package dk.partyroulette.runforyourmoney;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
@@ -69,7 +70,7 @@ public class ChallengeListAdapter extends ArrayAdapter<Challenge> {
 			// if not, assign some text!
 			if (textName != null){
 				textName.setText(challenge.getName());
-				progressBar.setProgress(challenge.getProgress());
+				progressBar.setProgress(challenge.getParticipants()[0].getProgress());
 				textType.setText(challenge.getTypeName());
 				textUpperBound.setText(String.valueOf(challenge.getRepetition().getAmount()));
 				textLowerBound.setText("0");
@@ -97,11 +98,23 @@ public class ChallengeListAdapter extends ArrayAdapter<Challenge> {
 
 			if(participants.length > 0)
 			{
+				ArrayList<Participant> sortedParticipants = new ArrayList<Participant>();
+				sortedParticipants.add(participants[0]);
+				for(int i = 1; i < participants.length; i++)
+				{
+					int j = 1;
+					while(i >= j && participants[i].getProgress() > sortedParticipants.get(i - j).getProgress())
+					{
+						j++;
+					}
+					sortedParticipants.add(i - j + 1, participants[i]);
+				}
+				
 				Bitmap[] bitmaps = new Bitmap[participants.length];
 
 				for(int i = 0; i < participants.length; i++)
 				{
-					bitmaps[i] = BitmapUtilities.loadBitmap(participants[i].getImageUrl());
+					bitmaps[i] = BitmapUtilities.loadBitmap(sortedParticipants.get(i).getImageUrl());
 				}
 
 				return bitmaps;
@@ -114,8 +127,11 @@ public class ChallengeListAdapter extends ArrayAdapter<Challenge> {
 		{
 			for(Bitmap bitmap : bitmaps)
 			{
+				Bitmap fixedBitmap = BitmapUtilities.roundCornersBitmap(Bitmap.createScaledBitmap(BitmapUtilities.cropBitmap(bitmap), 80, 80, false));
+				
 				ImageView imageView = new ImageView(getContext());
-				imageView.setImageBitmap(bitmap);
+				imageView.setPadding(5, 5, 0, 5);
+				imageView.setImageBitmap(fixedBitmap);
 				parent.addView(imageView);
 			}
 		}
