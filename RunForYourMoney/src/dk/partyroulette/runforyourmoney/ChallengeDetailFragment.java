@@ -148,7 +148,7 @@ public class ChallengeDetailFragment extends Fragment implements OnClickListener
 				Bitmap fixedBitmap = BitmapUtilities.roundCornersBitmap(Bitmap.createScaledBitmap(BitmapUtilities.cropBitmap(bitmaps[i]), 100, 100, false));
 				
 				ProgressBar progressBar = (ProgressBar) parents[i].findViewById(R.id.progressBar);
-				ImageView imageParticipant = (ImageView) parents[i].findViewById(R.id.imageParticipant);
+				ImageView imageParticipant = (ImageView) parents[i].findViewById(R.id.imageProfile);
 				
 				progressBar.setProgress(sortedParticipants.get(i).getProgress());
 				imageParticipant.setImageBitmap(fixedBitmap);

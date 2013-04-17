@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="150dp"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="6dip" >
+    android:paddingBottom="5dp"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="5dp" >
 
     <!-- Item Name -->
 
     <ImageView
-        android:id="@+id/imageParticipant"
+        android:id="@+id/imageProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_launcher" />
+        android:src="@drawable/challenge_running" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/activity_horizontal_margin" >
 
         <TextView
             android:id="@+id/textName"
@@ -29,7 +33,7 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textType"
+            android:id="@+id/textChallenges"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall" />

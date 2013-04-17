@@ -5,6 +5,9 @@ import java.util.List;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.LightingColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -61,7 +64,7 @@ public class ChallengeListAdapter extends ArrayAdapter<Challenge> {
 
 			TextView textName = (TextView) v.findViewById(R.id.textName);
 			ProgressBar progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
-			TextView textType = (TextView) v.findViewById(R.id.textType);
+			TextView textType = (TextView) v.findViewById(R.id.textChallenges);
 			TextView textUpperBound = (TextView) v.findViewById(R.id.textUpperBound);
 			TextView textLowerBound = (TextView) v.findViewById(R.id.textLowerBound);
 			LinearLayout layoutParticipants = (LinearLayout) v.findViewById(R.id.layoutParticipants);
@@ -71,6 +74,8 @@ public class ChallengeListAdapter extends ArrayAdapter<Challenge> {
 			if (textName != null){
 				textName.setText(challenge.getName());
 				progressBar.setProgress(challenge.getParticipants()[0].getProgress());
+				Drawable drawable = progressBar.getProgressDrawable();
+				drawable.setColorFilter(new LightingColorFilter(0xFF000000, Color.parseColor("#669900")));
 				textType.setText(challenge.getTypeName());
 				textUpperBound.setText(String.valueOf(challenge.getRepetition().getAmount()));
 				textLowerBound.setText("0");

@@ -18,7 +18,8 @@ import dk.partyroulette.runforyourmoney.DummyContent;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ChallengeListFragment extends ListFragment {
+public class ChallengeListFragment extends ListFragment 
+{
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the

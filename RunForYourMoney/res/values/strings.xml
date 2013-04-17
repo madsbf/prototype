@@ -3,7 +3,7 @@
 
     <string name="app_name">Run For Your Money</string>
     <string name="title_challenge_detail">Challenge Detail</string>
-    <string name="title_challenge_add">Add Challenge</string>
+    <string name="title_challenge_add">New Challenge</string>
     
     <string-array name="challenge_types">
         <item>Run</item>

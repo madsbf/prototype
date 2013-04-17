@@ -34,6 +34,8 @@ public class DummyContent {
 		addItem(new Challenge(1l, "5km run", "Run 5km before the 23rd of april.", new Repetition(5), participants1));
 		addItem(new Challenge(2l, "20km run", "Run 20km bla bla bla.", new Repetition(20), participants2));
 	}
+	
+	public static Profile PROFILE = new Profile("Mads", "http://graph.facebook.com/madsbf/picture?type=normal");
 
 	private static void addItem(Challenge item) {
 		ITEMS.add(item);
