@@ -17,7 +17,7 @@ public class RunObject extends Activity{
 	int hour;
 	int minutes;
 	int seconds;
-	Float length; // in meters
+	Float length = (float) 0.0; // in meters
 	Float avgPaceMinutes; //in minutes/seconds per km
 	Float avgPaceSeconds; //in minutes/seconds per km
 	Float avgSpeed; // in km pr hour 
@@ -30,7 +30,7 @@ public class RunObject extends Activity{
 
 	private void calcStatistics() {
 		//time
-		Float milliseconds = (gpsData.get(gpsData.size()).get(3)-gpsData.get(0).get(3));
+		Float milliseconds = (gpsData.get(gpsData.size()-1).get(3)-gpsData.get(0).get(3));
 		Float tmp_hour = milliseconds/(1000*60*60);
 		hour = (int) Math.floor(tmp_hour);
 		

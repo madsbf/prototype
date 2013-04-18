@@ -1,6 +1,9 @@
 package dk.partyroulette.runforyourmoney;
 
+import java.util.ArrayList;
+
 import android.app.Activity;
+import android.app.Fragment;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -14,12 +17,31 @@ import com.google.android.gms.maps.model.PolylineOptions;
 public class RunStatisticsActivity extends Activity
 {
 	private GoogleMap rMap;
+	private ArrayList<ArrayList<Float>> gpsData;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_run_statistics);
+	    
+	    
+	    //debug purposes
+	    createFakeData();
+	    
 	    drawOnMap();
+	    
+	    updateStatistics();
 	}
+
+
+
+	private void updateStatistics() 
+	{
+		RunObject r = new RunObject(gpsData);
+		RunStatisticsFragment rsFragment = (RunStatisticsFragment) getFragmentManager().findFragmentById(R.id.stats);
+		rsFragment.setText(r);
+	}
+
+
 
 	private void drawOnMap() 
 	{
@@ -27,23 +49,22 @@ public class RunStatisticsActivity extends Activity
 		//check map availability
 		if(rMap!=null)
 		{
-			//start map position
-			rMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(55.784027,12.518684),15));
+			//start map position, start on the first point of the route
+			LatLng start = new LatLng(gpsData.get(0).get(0),gpsData.get(0).get(1));
+			LatLng end = new LatLng(gpsData.get(gpsData.size()-1).get(0),gpsData.get(gpsData.size()-1).get(1));
+			
+			rMap.moveCamera(CameraUpdateFactory.newLatLngZoom(start,17));
 			
 			//draw gps points on route
-			rMap.addMarker(new MarkerOptions().position(new LatLng(55.784027,12.518684)).title("Start"));
-			rMap.addMarker(new MarkerOptions().position(new LatLng(55.784027,12.518584)).title("End"));
+			rMap.addMarker(new MarkerOptions().position(start).title("Start"));
+			rMap.addMarker(new MarkerOptions().position(end).title("End"));
 			
 			//draw route
-			PolylineOptions routeOptions = new PolylineOptions()
-			.add(new LatLng(55.784027,12.518684))
-			.add(new LatLng(55.784327,12.518684))
-			.add(new LatLng(55.784427,12.518684))
-			.add(new LatLng(55.784427,12.518484))
-			.add(new LatLng(55.784427,12.518284))
-			.add(new LatLng(55.784227,12.518384))
-			.add(new LatLng(55.784127,12.518484))
-			.add(new LatLng(55.784027,12.518584));
+			PolylineOptions routeOptions = new PolylineOptions();
+			for(ArrayList<Float> tmp : gpsData)
+			{
+				routeOptions.add(new LatLng(tmp.get(0),tmp.get(1)));
+			}
 			routeOptions.color(0xff00FF00);
 			routeOptions.width(6);
 			
@@ -51,6 +72,65 @@ public class RunStatisticsActivity extends Activity
 			Polyline polyline = rMap.addPolyline(routeOptions);
 			
 		}
+	}
+	private void createFakeData() {
+		gpsData = new ArrayList<ArrayList<Float>>();
+	    ArrayList<Float> tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784027);
+	    tmp.add((float) 12.518684);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.3615378E12);
+	    gpsData.add(tmp);
+	    tmp = null;
+	    tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784327);
+	    tmp.add((float) 12.518684);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.361538E12);
+	    gpsData.add(tmp);
+	    tmp = null;
+	    tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784427);
+	    tmp.add((float) 12.518684);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.3615382E12);
+	    gpsData.add(tmp);
+	    tmp = null;
+	    tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784427);
+	    tmp.add((float) 12.518484);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.3615382E12);
+	    gpsData.add(tmp);
+	    tmp = null;
+	    tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784427);
+	    tmp.add((float) 12.518284);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.3615382E12);
+	    gpsData.add(tmp);
+	    tmp = null;
+	    tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784227);
+	    tmp.add((float) 12.518384);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.3615383E12);
+	    gpsData.add(tmp);
+	    tmp = null;
+	    tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784127);
+	    tmp.add((float) 12.518484);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.3615383E12);
+	    gpsData.add(tmp);
+	    tmp = null;
+	    tmp = new ArrayList<Float>();
+	    tmp.add((float) 55.784027);
+	    tmp.add((float) 12.518584);
+	    tmp.add((float) 20.0);
+	    tmp.add((float) 1.3615384E12);
+	    gpsData.add(tmp);
+	    tmp = null;
 	}
 
 }
