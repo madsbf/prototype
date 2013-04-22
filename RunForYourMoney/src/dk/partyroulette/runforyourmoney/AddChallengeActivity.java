@@ -1,9 +1,5 @@
 package dk.partyroulette.runforyourmoney;
 
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
-import com.parse.PushService;
-
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
