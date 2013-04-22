@@ -1,5 +1,9 @@
 package dk.partyroulette.runforyourmoney;
 
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.PushService;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +16,7 @@ public class AddChallengeActivity extends Activity implements OnClickListener
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_challenge);
-
+		
 		// Show the Up button in the action bar.
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
