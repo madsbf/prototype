@@ -12,7 +12,8 @@ import com.google.android.maps.*;
  * @author Du
  *
  */
-public class RunObject extends Activity{
+public class RunObject extends Progress
+{
 	ArrayList<ArrayList<Float>> gpsData;
 	int hour;
 	int minutes;
@@ -60,6 +61,12 @@ public class RunObject extends Activity{
 		avgPaceMinutes = (float) Math.floor(pace/60.0);
 		avgPaceSeconds = (float) Math.floor(pace-avgPaceMinutes*60.0);
 		
+	}
+
+	@Override
+	protected int getProgressInt() 
+	{
+		return Math.round(length / 1000);
 	}
 
 

@@ -18,13 +18,21 @@ public class Challenge {
 	
 	private String description;
 	
-	public Challenge(long id, String name, String description, Repetition repetition, Participant[] participants)
+	private boolean active;
+	
+	public Challenge(long id, String name, String description, Repetition repetition, Participant[] participants, boolean active)
 	{
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.repetition = repetition;
 		this.participants = participants;
+		this.active = active;
+	}
+	
+	public boolean isActive()
+	{
+		return active;
 	}
 	
 	public Participant[] getParticipants()

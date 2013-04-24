@@ -4,9 +4,9 @@ public class Participant {
 
 	private String name;
 	private String imageUrl;
-	private int progress;
+	private Progress progress;
 	
-	public Participant(String name, String imageUrl, int progress)
+	public Participant(String name, String imageUrl, Progress progress)
 	{
 		this.name = name;
 		this.imageUrl = imageUrl;
@@ -23,7 +23,7 @@ public class Participant {
 		return imageUrl;
 	}
 	
-	public int getProgress()
+	public Progress getProgress()
 	{
 		return progress;
 	}
