@@ -11,13 +11,20 @@ import dk.partyroulette.runforyourmoney.R;
 import dk.partyroulette.runforyourmoney.R.id;
 import dk.partyroulette.runforyourmoney.R.layout;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.ViewConfiguration;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 
 /**
  * An activity representing a list of Challenges. This activity has different
@@ -47,12 +54,21 @@ public class ChallengeListActivity extends FragmentActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_challenge_list);
+		
+		
 		
 		// Set Parse parameters
 		Parse.initialize(this, "aAnnNfcUtvwSLy7XD2ImtnbLpwYko5Dp1FdCheuC","DDDbciaF9P4DcXXodmAJIfVn1M3bQTJ0CtS0Cc9t"); 
 		PushService.setDefaultPushCallback(this, ChallengeListActivity.class);
 		ParseAnalytics.trackAppOpened(getIntent());
+		if(Contact.checkForInstallation()){
+			System.out.println("INSTALLED");
+			setContentView(R.layout.activity_challenge_list);
+		}else{
+			System.out.println("NOT INSTALLED");
+			setContentView(R.layout.login);
+			
+		}
 		
 		
 		// HACK til at vise menu-knap
@@ -140,5 +156,43 @@ public class ChallengeListActivity extends FragmentActivity implements
 			detailIntent.putExtra(ChallengeDetailFragment.ARG_ITEM_ID, id);
 			startActivity(detailIntent);
 		}
+	}
+	
+	public void registerUser(View view){
+		EditText firstNameText = (EditText) findViewById(R.id.firstNameText);
+	    EditText lastNameText = (EditText) findViewById(R.id.lastNameText);
+	    System.out.println("firstname: "+firstNameText.getText().toString());
+	    if(firstNameText.getText().toString().equals("") || lastNameText.getText().toString().equals("")){
+	    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+					this);
+	 
+				// set title
+				alertDialogBuilder.setTitle("Enter Credentials");
+	 
+				// set dialog message
+				alertDialogBuilder
+					.setMessage("Please enter first and last name.")
+					.setCancelable(false)
+					.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+						public void onClick(DialogInterface dialog,int id) {
+							// if this button is clicked, close
+							// current activity
+						}
+					  });
+	 
+					// create alert dialog
+					AlertDialog alertDialog = alertDialogBuilder.create();
+	 
+					// show it
+					alertDialog.show();
+				
+			return;
+		}
+	    
+		Contact.addContactToDB(new Contact(firstNameText.getText().toString(),lastNameText.getText().toString()));
+		setContentView(R.layout.activity_challenge_list);
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(lastNameText.getWindowToken(), 0);
+		imm.hideSoftInputFromWindow(firstNameText.getWindowToken(), 0);
 	}
 }

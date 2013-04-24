@@ -13,7 +13,7 @@ public class Contact {
 		setLastName(lastname);
 	}
 	
-	/*
+	/**
 	 * The first name of the contact.
 	 */
 	private String FirstName;
@@ -24,7 +24,7 @@ public class Contact {
 		this.FirstName = firstname;
 	}
 	
-	/*
+	/**
 	 * The last name of the contact.
 	 */
 	private String LastName;
@@ -36,7 +36,7 @@ public class Contact {
 	}
 	
 	
-	/*
+	/**
 	 * Unique identifier of the user.
 	 */
 	private String contactId;
@@ -93,8 +93,10 @@ public class Contact {
 		 });
 	}
 	
-	/*
+	
+	/**
 	 * Add contact to Parse database.
+	 * @param contact object
 	 */
 	public static void addContactToDB(Contact c){
 		System.out.println("Saving contact");
@@ -106,10 +108,12 @@ public class Contact {
 		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
 		installation.put("fullname",c.FirstName+c.LastName);
 		installation.saveInBackground();
+		
 	}
 
-	/*
+	/**
 	 * Retrieve all contact into subscribers interface instance 'RetrievedObjectListener'.
+	 * @param retrievedObjectListener
 	 */
 	public static void retrieveAllContacts(final RetrievedObjectListener retrievedObjectListener){
 	
@@ -129,10 +133,11 @@ public class Contact {
 		 });
 	}
 	
-	/*
+	/**
 	 * Generate contact objects from parse objects.
 	 * 
-	 * return a list of contacts.
+	 * @param Parse objects
+	 * @return a list of contacts
 	 */
 	private static List<Contact> generateContactObjects(List<ParseObject> objects){
 		List<Contact> contacts = new ArrayList<Contact>();
@@ -143,8 +148,10 @@ public class Contact {
 		return contacts;
 	}
 	
-	/*
+	/**
 	 * Send notification to contact.
+	 * @param notification message
+	 * @param fullname
 	 */
 	public static void sendNotification(String notificationMsg, String fullname){
 		//JSONObject data = new JSONObject("{\"title\":\"Run Notification\",\"alert\": \""+notificationMsg+"\"}");
@@ -158,6 +165,22 @@ public class Contact {
 		push.setQuery(pushQuery); // Set our Installation query
 		push.setMessage(notificationMsg);
 		push.sendInBackground();
+	}
+	
+	/**
+	 * Check whether the app is already installed on the device.
+	 * @return true if the app is already installed otherwise false.
+	 */
+	public static boolean checkForInstallation(){
+		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+		installation.getInstallationId();
+		String fullname = installation.getString("fullname");
+		System.out.println("FULLNAME: "+fullname);
+		if(fullname == null){
+			return false;
+		}
+		return true;
+		
 	}
 	
 	

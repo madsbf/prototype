@@ -10,5 +10,8 @@
         <item>Whereabouts</item>
     </string-array>
     <string name="action_settings">Action settings????</string>
+    <string name="button_register">Register</string>
+    <string name="firstname_hint">Firstname</string>
+    <string name="lastname_hint">Lastname</string>
 
 </resources>
