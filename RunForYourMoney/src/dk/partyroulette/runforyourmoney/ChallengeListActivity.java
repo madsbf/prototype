@@ -2,6 +2,11 @@ package dk.partyroulette.runforyourmoney;
 
 import java.lang.reflect.Field;
 
+import dk.partyroulette.runforyourmoney.Contact;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.PushService;
+
 import dk.partyroulette.runforyourmoney.R;
 import dk.partyroulette.runforyourmoney.R.id;
 import dk.partyroulette.runforyourmoney.R.layout;
@@ -43,6 +48,12 @@ public class ChallengeListActivity extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_challenge_list);
+		
+		// Set Parse parameters
+		Parse.initialize(this, "aAnnNfcUtvwSLy7XD2ImtnbLpwYko5Dp1FdCheuC","DDDbciaF9P4DcXXodmAJIfVn1M3bQTJ0CtS0Cc9t"); 
+		PushService.setDefaultPushCallback(this, ChallengeListActivity.class);
+		ParseAnalytics.trackAppOpened(getIntent());
+		
 		
 		// HACK til at vise menu-knap
 		try {

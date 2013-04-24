@@ -23,7 +23,6 @@ public class RunStatisticsActivity extends Activity
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_run_statistics);
 	    
-	    
 	    //debug purposes
 	    createFakeData();
 	    
