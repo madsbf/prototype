@@ -2,7 +2,6 @@ package dk.partyroulette.runforyourmoney;
 
 import java.lang.reflect.Field;
 
-import dk.partyroulette.runforyourmoney.Contact;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
 import com.parse.PushService;
