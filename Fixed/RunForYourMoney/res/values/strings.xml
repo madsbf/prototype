@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Run For Your Money</string>
+    <string name="title_challenge_detail">Challenge Detail</string>
+    <string name="title_challenge_add">New Challenge</string>
+    
+    <string-array name="challenge_types">
+        <item>Run</item>
+        <item>Whereabouts</item>
+    </string-array>
+    <string name="action_settings">Action settings????</string>
+
+</resources>
