@@ -9,6 +9,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import com.parse.ParseObject;
+
 public class Running extends Activity implements VerificationMethod{
 	private LocationManager locationManager;
 	private ArrayList<ArrayList<Float>> gpsData;
@@ -43,6 +45,9 @@ public class Running extends Activity implements VerificationMethod{
 		locationManager.removeUpdates(locationListener);
 		//prepare dataobject
 		RunObject ro = new RunObject(gpsData);
+		ParseObject runObject = new ParseObject("Run");
+		runObject.put("runObject", ro);
+		runObject.saveInBackground();
 	}
 
 	@Override

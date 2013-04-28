@@ -1,12 +1,9 @@
 package dk.partyroulette.runforyourmoney;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import android.app.Activity;
 import android.location.Location;
-
-import com.google.android.maps.*;
 /**
  * This class only contains data. When initiated it calculates some additional statistics about the run.
  * @author Du
