@@ -249,7 +249,6 @@ public class Challenge{
 					List<String> par = object.getList("participants");
 					for(int i = 0; i<par.size();i++){
 						if(par.get(i).replace(" ", "").equals(Contact.getCurrentUser())){
-							System.out.println("CHECK");
 
 							List<String> acc = object.getList("accepted");
 							acc.remove(i);
