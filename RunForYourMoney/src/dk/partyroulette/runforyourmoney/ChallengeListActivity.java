@@ -1,12 +1,16 @@
 package dk.partyroulette.runforyourmoney;
 
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
+import java.util.List;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.text.format.DateFormat;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,10 +21,14 @@ import android.widget.EditText;
 
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseObject;
 import com.parse.PushService;
 
 import dk.partyroulette.runforyourmoney.R;
+import dk.partyroulette.runforyourmoney.control.RetrievedObjectListener;
+import dk.partyroulette.runforyourmoney.datalayer.Challenge;
 import dk.partyroulette.runforyourmoney.datalayer.Contact;
+import dk.partyroulette.runforyourmoney.datalayer.Participant;
 
 /**
  * An activity representing a list of Challenges. This activity has different
@@ -39,7 +47,7 @@ import dk.partyroulette.runforyourmoney.datalayer.Contact;
  * selections.
  */
 public class ChallengeListActivity extends FragmentActivity implements
-		ChallengeListFragment.Callbacks {
+		ChallengeListFragment.Callbacks, RetrievedObjectListener {
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -65,6 +73,8 @@ public class ChallengeListActivity extends FragmentActivity implements
 			setContentView(R.layout.login);
 			
 		}
+		
+		Challenge.retrieveChallengesFromDBForUser(this, Contact.getCurrentUser());
 		
 		
 		// HACK til at vise menu-knap
@@ -194,5 +204,68 @@ public class ChallengeListActivity extends FragmentActivity implements
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(lastNameText.getWindowToken(), 0);
 		imm.hideSoftInputFromWindow(firstNameText.getWindowToken(), 0);
+	}
+
+	@Override
+	public void onRetrievedContactObject(List<Contact> contacts) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRetrievedChallengeObjects(List<Challenge> challenges) {
+		System.out.println("RETRIEVED CHALLENGES"+Integer.toString(challenges.size()));
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");  
+		
+		// TODO ALSO SHOW CHALLENGES THAT ARE ACCEPTED
+		
+		for(Challenge c: challenges){
+			for(Participant p: c.getParticipants()){
+				if(p.getName().replace(" ", "").equals(Contact.getCurrentUser()) && !p.getAccepted()){
+					showAcceptChallengeAlert(c.getChallengeOwner()+" has challenged you to run "+c.getLength()+" km. before "+df.format(c.getDeadline())+".",c.getIdentifier());
+				}
+			}
+		}
+	}
+	
+	private void showAcceptChallengeAlert(String msg, final String identifier){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				this);
+ 
+			// set title
+			alertDialogBuilder.setTitle("Accept Challenge?");
+ 
+			// set dialog message
+			alertDialogBuilder
+				.setMessage(msg)
+				.setCancelable(false)
+				.setNegativeButton("Decline",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						// if this button is clicked, close
+						// current activity
+						Challenge.declineChallenge(identifier);
+					}
+				  })
+
+				.setPositiveButton("Accept",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						// if this button is clicked, close
+						// current activity
+						Challenge.acceptChallenge(identifier);
+					}
+				  });
+ 
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+ 
+				// show it
+				alertDialog.show();
+
+	}
+
+	@Override
+	public void onRetrievedObject(List<ParseObject> obj) {
+		// TODO Auto-generated method stub
+		
 	}
 }

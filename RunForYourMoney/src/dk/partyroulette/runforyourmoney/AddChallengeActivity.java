@@ -106,7 +106,7 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		}
 		
 		// Save challenge in DB
-		Challenge c = new Challenge(editName.getText().toString(), "challenge", d, participants, true, Integer.parseInt(editLength.getText().toString()));
+		Challenge c = new Challenge(editName.getText().toString(), "challenge", d, participants, true, Integer.parseInt(editLength.getText().toString()),Contact.getCurrentUser());
 		Challenge.addChallengeToDB(c);
 		
 		// Send push messages to participants
