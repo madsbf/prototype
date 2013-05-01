@@ -54,7 +54,9 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		registerOnClickListener();
 	}
 	
-	
+	/**
+	 * Assign all view components to variables.
+	 */
 	private void registerViews()
 	{
 		buttonChallenge = (ImageButton) findViewById(R.id.buttonChallenge);
@@ -95,12 +97,12 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		// Set participants and corresponding progress objects.
 		Participant[] participants= new Participant[friendsAdded.size()];
 		for(int i = 0; i<participants.length; i++){
-			Participant participant = new Participant(friendsAdded.get(i), " ", new IntProgress(0));
+			Participant participant = new Participant(friendsAdded.get(i), " ", new IntProgress(0),false);
 			participants[i] = participant;
 		}
 		
 		// Save challenge in DB
-		Challenge c = new Challenge(editName.getText().toString(), "challenge", d, participants, true);
+		Challenge c = new Challenge(editName.getText().toString(), "challenge", d, participants, true, Integer.parseInt(editLength.getText().toString()));
 		Challenge.addChallengeToDB(c);
 		
 		// Send push messages to participants
@@ -207,6 +209,12 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 
 	@Override
 	public void onRetrievedObject(List<ParseObject> obj) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRetrievedChallengeObjects(List<Challenge> challenges) {
 		// TODO Auto-generated method stub
 		
 	}

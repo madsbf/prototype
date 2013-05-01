@@ -5,7 +5,16 @@ public class Participant {
 	private String name;
 	private String imageUrl;
 	private Progress progress;
+	private boolean hasAccepted;
 
+	public Participant(String name, String imageUrl, Progress progress, boolean hasAccepted)
+	{
+		this.name = name;
+		this.imageUrl = imageUrl;
+		this.progress = progress;
+		this.hasAccepted = hasAccepted;
+	}
+	
 	public Participant(String name, String imageUrl, Progress progress)
 	{
 		this.name = name;
@@ -26,5 +35,10 @@ public class Participant {
 	public Progress getProgress()
 	{
 		return progress;
+	}
+	
+	public boolean getAccepted()
+	{
+		return hasAccepted;
 	}
 }
