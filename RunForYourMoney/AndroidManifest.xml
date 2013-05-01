@@ -51,7 +51,7 @@
         <activity
             android:name="dk.partyroulette.runforyourmoney.AddChallengeActivity"
             android:label="@string/title_challenge_add"
-            android:parentActivityName="dk.partyroulette.runforyourmoney.ChallengeListActivityeListActivity" >
+            android:parentActivityName="dk.partyroulette.runforyourmoney.ChallengeListActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".ChallengeListActivity" />

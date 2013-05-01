@@ -1,9 +1,8 @@
-package dk.partyroulette.runforyourmoney;
+package dk.partyroulette.runforyourmoney.datalayer;
 
-public class LearningChallenge extends Challenge 
-{
+public class MiscChallenge extends Challenge {
 
-	public LearningChallenge(long id, String name, String description,
+	public MiscChallenge(long id, String name, String description,
 			Repetition repetition, Participant[] participants, boolean active) 
 	{
 		super(id, name, description, repetition, participants, active);
@@ -12,7 +11,7 @@ public class LearningChallenge extends Challenge
 	@Override
 	public String getTypeName()
 	{
-		return "Learning Challenge";
+		return "Challenge";
 	}
 
 }

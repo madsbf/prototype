@@ -6,8 +6,7 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-
-import dk.partyroulette.runforyourmoney.DummyContent;
+import dk.partyroulette.runforyourmoney.R;
 
 /**
  * A list fragment representing a list of Challenges. This fragment also

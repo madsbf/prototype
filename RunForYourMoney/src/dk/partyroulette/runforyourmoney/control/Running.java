@@ -1,7 +1,7 @@
-package dk.partyroulette.runforyourmoney;
+package dk.partyroulette.runforyourmoney.control;
 
 import java.util.ArrayList;
-
+import dk.partyroulette.runforyourmoney.datalayer.*;
 import android.app.Activity;
 import android.content.Context;
 import android.location.Location;

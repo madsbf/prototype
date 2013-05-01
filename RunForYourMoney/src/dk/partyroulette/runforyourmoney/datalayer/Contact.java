@@ -1,7 +1,8 @@
-package dk.partyroulette.runforyourmoney;
+package dk.partyroulette.runforyourmoney.datalayer;
 
 import java.util.ArrayList;
 import java.util.List;
+import dk.partyroulette.runforyourmoney.control.*;
 
 
 import com.parse.*;
@@ -181,6 +182,17 @@ public class Contact {
 		}
 		return true;
 		
+	}
+	
+	/**
+	 * Get name of the user who has registered with the app.
+	 * @return the full name of the user (this acts like the unique identifier) in this app.
+	 */
+	public static String getCurrentUser(){
+		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+		installation.getInstallationId();
+		String fullname = installation.getString("fullname");
+		return fullname;
 	}
 	
 	

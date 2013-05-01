@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import dk.partyroulette.runforyourmoney.control.*;
+import dk.partyroulette.runforyourmoney.R;
 
 public class OverviewFragment extends Fragment 
 {

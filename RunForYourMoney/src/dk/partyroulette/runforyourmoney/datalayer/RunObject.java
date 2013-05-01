@@ -1,4 +1,4 @@
-package dk.partyroulette.runforyourmoney;
+package dk.partyroulette.runforyourmoney.datalayer;
 
 import java.util.ArrayList;
 

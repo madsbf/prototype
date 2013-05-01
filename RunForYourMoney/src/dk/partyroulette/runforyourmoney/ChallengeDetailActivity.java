@@ -1,6 +1,7 @@
 package dk.partyroulette.runforyourmoney;
 
 import dk.partyroulette.runforyourmoney.R;
+import dk.partyroulette.runforyourmoney.*;
 import dk.partyroulette.runforyourmoney.R.id;
 import dk.partyroulette.runforyourmoney.R.layout;
 

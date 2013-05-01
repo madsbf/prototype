@@ -2,9 +2,10 @@ package dk.partyroulette.runforyourmoney;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
+import dk.partyroulette.runforyourmoney.R;
 import com.parse.ParseObject;
-
+import dk.partyroulette.runforyourmoney.datalayer.*;
+import dk.partyroulette.runforyourmoney.control.*;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -440,8 +441,8 @@ public class ChallengeView implements OnClickListener
 				if(ro.getLength()!=0.0)
 				{
 					System.out.println(ChallengeView.this.avgPace.toString());
-					ChallengeView.this.avgPace.setText("Avg Pace: " + ro.avgPaceMinutes + ":" + ro.avgPaceSeconds + " min/km");
-					ChallengeView.this.length.setText("Length: " + df.format(ro.length/1000) + " km");
+					ChallengeView.this.avgPace.setText("Avg Pace: " + ro.getAvgPaceMinutes() + ":" + ro.getAvgPaceSeconds() + " min/km");
+					ChallengeView.this.length.setText("Length: " + df.format(ro.getLength()/1000) + " km");
 					ChallengeView.this.time.setText("Time: " + ro.getHour() +":"+ro.getMinutes()+":"+ro.getSeconds());
 				}
 			}

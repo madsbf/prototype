@@ -1,16 +1,6 @@
 package dk.partyroulette.runforyourmoney;
 
 import java.lang.reflect.Field;
-
-import dk.partyroulette.runforyourmoney.Contact;
-import com.parse.Parse;
-import com.parse.ParseAnalytics;
-import com.parse.PushService;
-
-import dk.partyroulette.runforyourmoney.R;
-import dk.partyroulette.runforyourmoney.R.id;
-import dk.partyroulette.runforyourmoney.R.layout;
-
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -22,9 +12,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewConfiguration;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+import com.parse.PushService;
+
+import dk.partyroulette.runforyourmoney.R;
+import dk.partyroulette.runforyourmoney.datalayer.Contact;
 
 /**
  * An activity representing a list of Challenges. This activity has different
@@ -158,6 +154,10 @@ public class ChallengeListActivity extends FragmentActivity implements
 		}
 	}
 	
+	/**
+	 * Register the user of the app. This method should only be called first time app opens.
+	 * @param view
+	 */
 	public void registerUser(View view){
 		EditText firstNameText = (EditText) findViewById(R.id.firstNameText);
 	    EditText lastNameText = (EditText) findViewById(R.id.lastNameText);

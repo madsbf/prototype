@@ -1,7 +1,6 @@
-package dk.partyroulette.runforyourmoney;
+package dk.partyroulette.runforyourmoney.datalayer;
 import com.parse.*;
-
-import java.lang.reflect.Array;
+import dk.partyroulette.runforyourmoney.control.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;

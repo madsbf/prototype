@@ -1,7 +1,7 @@
-package dk.partyroulette.runforyourmoney;
+package dk.partyroulette.runforyourmoney.datalayer;
 
 import java.util.ArrayList;
-
+import dk.partyroulette.runforyourmoney.control.*;
 import android.content.Context;
 
 public class Location implements VerificationMethod{

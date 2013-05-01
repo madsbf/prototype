@@ -1,4 +1,4 @@
-package dk.partyroulette.runforyourmoney;
+package dk.partyroulette.runforyourmoney.control;
 
 import java.io.IOException;
 import java.io.InputStream;

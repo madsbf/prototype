@@ -1,7 +1,7 @@
 package dk.partyroulette.runforyourmoney;
 
 import java.util.ArrayList;
-
+import dk.partyroulette.runforyourmoney.datalayer.*;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
@@ -20,7 +20,7 @@ import android.widget.TextView;
 import dk.partyroulette.runforyourmoney.R;
 import dk.partyroulette.runforyourmoney.R.id;
 import dk.partyroulette.runforyourmoney.R.layout;
-import dk.partyroulette.runforyourmoney.DummyContent;
+
 
 /**
  * A fragment representing a single Challenge detail screen. This fragment is
