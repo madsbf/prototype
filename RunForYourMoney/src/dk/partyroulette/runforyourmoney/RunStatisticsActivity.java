@@ -92,7 +92,7 @@ public class RunStatisticsActivity extends Activity
 			
 		}
 	}
-	private void createFakeData() {
+	public void createFakeData() {
 		gpsData = new ArrayList<ArrayList<Float>>();
 	    ArrayList<Float> tmp = new ArrayList<Float>();
 	    tmp.add((float) 55.784027);

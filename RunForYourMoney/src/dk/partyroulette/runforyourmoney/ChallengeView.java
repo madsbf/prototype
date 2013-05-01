@@ -1,20 +1,24 @@
 package dk.partyroulette.runforyourmoney;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+
+import com.parse.ParseObject;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.LightingColorFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -30,7 +34,17 @@ public class ChallengeView implements OnClickListener
 	private Challenge challenge;
 	private Context context;
 
+	private ArrayList<ArrayList<Float>> gpsData;
+	private boolean paused = true;
+	private boolean runStarted = false;
+	private LocationManager locationManager;
+
 	private Button startButton;
+	private Button stopButton;
+	
+	private TextView avgPace;
+	private TextView length;
+	private TextView time;
 
 	private int primaryColor;
 	private int secondaryColor;
@@ -76,30 +90,32 @@ public class ChallengeView implements OnClickListener
 		activity.setTitle(challenge.getName());
 		activity.getActionBar().setIcon(imageResourceId);
 		activity.getActionBar().setBackgroundDrawable(new ColorDrawable(primaryColor));
-		
+
 		LayoutInflater inflater = activity.getLayoutInflater();
-		
+
 		LinearLayout layoutChallenge = (LinearLayout) view.findViewById(R.id.layoutChallenge);
-		
+
 		if(challenge instanceof ExerciseChallenge)
 		{			
 			LinearLayout challengeView = (LinearLayout) inflater.inflate(R.layout.challenge_run_detail,
 					view, false);
-			
-			TextView textAvgPace = (TextView) challengeView.findViewById(R.id.textAvgPace);
-			TextView textTime = (TextView) challengeView.findViewById(R.id.textTime);
-			TextView textLength = (TextView) challengeView.findViewById(R.id.textLength);
-			
-			textAvgPace.setText("Text Avg Pace");
-			textTime.setText("Text Time");
-			textLength.setText("Text Length");
-			
+
+			avgPace = (TextView) challengeView.findViewById(R.id.textAvgPace);
+			time = (TextView) challengeView.findViewById(R.id.textTime);
+			length = (TextView) challengeView.findViewById(R.id.textLength);
+
+			avgPace.setText("Text Avg Pace");
+			time.setText("Text Time");
+			length.setText("Text Length");
+
 			startButton = (Button) challengeView.findViewById(R.id.buttonStart);
 			startButton.setOnClickListener(this);
-		
+			stopButton = (Button) challengeView.findViewById(R.id.buttonStop);
+			stopButton.setOnClickListener(this);
+
 			layoutChallenge.addView(challengeView);
 		}
-		
+
 		// Participants view
 		LinearLayout layoutProgress = (LinearLayout) view.findViewById(R.id.layoutProgress);
 		LinearLayout[] participantViews = new LinearLayout[challenge.getParticipants().length];
@@ -107,7 +123,7 @@ public class ChallengeView implements OnClickListener
 		{
 			LinearLayout participantView = (LinearLayout) inflater.inflate(R.layout.participant,
 					view, false);
-			
+
 			TextView textUpperBound = (TextView) participantView.findViewById(R.id.textUpperBound);
 			TextView textLowerBound = (TextView) participantView.findViewById(R.id.textLowerBound);
 
@@ -161,7 +177,7 @@ public class ChallengeView implements OnClickListener
 				drawable.setColorFilter(new LightingColorFilter(0xFF000000, Color.parseColor(PRIMARY_COLOR_GREY)));
 			}
 		}
-		
+
 		ImageView[] imageViews = new ImageView[challenge.getParticipants().length];
 		for(int i = 0; i < challenge.getParticipants().length; i++)
 		{
@@ -220,7 +236,7 @@ public class ChallengeView implements OnClickListener
 			for(int i = 0; i < bitmaps.length; i++)
 			{
 				Bitmap bitmap;
-				
+
 				if(challenge.isActive())
 				{
 					bitmap = bitmaps[i];
@@ -229,7 +245,7 @@ public class ChallengeView implements OnClickListener
 				{
 					bitmap = BitmapUtilities.toGrayscale(bitmaps[i]);
 				}
-				
+
 				int size = 40;
 				switch(i)
 				{
@@ -243,7 +259,7 @@ public class ChallengeView implements OnClickListener
 					size = 60;
 					break;
 				}
-				
+
 				imageViews[i].setImageBitmap(BitmapUtilities.roundCornersBitmap(Bitmap.createScaledBitmap(BitmapUtilities.cropBitmap(bitmap), size, size, true)));
 			}
 		}
@@ -300,7 +316,7 @@ public class ChallengeView implements OnClickListener
 				ImageView imageParticipant = (ImageView) parents[i].findViewById(R.id.imageParticipant);
 
 				progressBar.setProgress(sortedParticipants.get(i).getProgress().getPercentage(challenge.getRepetition().getAmount()));
-				
+
 				if(challenge.isActive())
 				{
 					bitmap = bitmaps[i];
@@ -309,7 +325,7 @@ public class ChallengeView implements OnClickListener
 				{
 					bitmap = BitmapUtilities.toGrayscale(bitmaps[i]);
 				}
-				
+
 				int size = 50;
 				switch(i)
 				{
@@ -323,7 +339,7 @@ public class ChallengeView implements OnClickListener
 					size = 75;
 					break;
 				}
-				
+
 				imageParticipant.setImageBitmap(BitmapUtilities.roundCornersBitmap(Bitmap.createScaledBitmap(BitmapUtilities.cropBitmap(bitmap), size, size, true)));
 			}
 		}
@@ -335,8 +351,180 @@ public class ChallengeView implements OnClickListener
 	{
 		if(view.getId() == R.id.buttonStart)
 		{
-			Intent intent = new Intent(context, RunStatisticsActivity.class);
-			context.startActivity(intent);
-		}	
+			if(runStarted)
+			{
+				pause();
+			} else 
+			{
+				startRun();
+			}
+		} else if (view.getId() == R.id.buttonStop)
+		{
+			end();
+		}
+	}
+
+	private void startRun() 
+	{
+		gpsData = new ArrayList<ArrayList<Float>>();
+		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+		//get initial location
+		Location location = locationManager.getLastKnownLocation("network");
+		//receive location updates
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		paused = false;
+		runStarted = true;
+		startButton.setText("Pause");
+		stopButton.setVisibility(View.VISIBLE);
+	}
+
+	public void pause() 
+	{
+		if(paused)
+		{
+			paused = false;
+			startButton.setText("Pause");
+		} else {
+			paused = true;
+			startButton.setText("Un-pause");
+		}
+	}
+
+	public void end() {
+		//stop receiving updates
+		locationManager.removeUpdates(locationListener);
+		//prepare dataobject
+		RunObject ro = new RunObject(gpsData);
+		//RunObject ro = new RunObject(createFakeData()); DEBUG
+		if(ro.getLength()!=0.0)
+		{
+			ParseObject gpsData = new ParseObject("GPSData");
+			for(ArrayList<Float> gpsCoord : ro.getGpsData())
+			{
+				ParseObject gpsObject = new ParseObject("GPS");
+				gpsObject.put("lat",gpsCoord.get(0));
+				gpsObject.put("ln", gpsCoord.get(1));
+				gpsObject.put("acc", gpsCoord.get(2));
+				gpsObject.put("time", gpsCoord.get(3));
+				gpsData.add("gpsCoord", gpsObject);
+			}
+			gpsData.saveInBackground();
+		}
+		stopButton.setVisibility(View.INVISIBLE);
+		startButton.setText("Go!");
+		paused = true;
+		runStarted = false;
+	}
+
+
+
+	LocationListener locationListener = new LocationListener() {
+		@Override
+		public void onLocationChanged(Location location) {
+			//add to database
+			if(location!=null && !paused)
+			{
+				float lat = (float) location.getLatitude();
+				float lng = (float) location.getLongitude();
+				int acc = (int) location.getAccuracy();
+				ArrayList<Float> temp = new ArrayList<Float>();
+				temp.add(lat);
+				temp.add(lng);
+				temp.add((float) acc);
+				temp.add((float) location.getTime());
+				gpsData.add(temp);
+				
+				DecimalFormat df = new DecimalFormat();
+				df.setMaximumFractionDigits(2);
+				RunObject ro = new RunObject(gpsData);
+				if(ro.getLength()!=0.0)
+				{
+					System.out.println(ChallengeView.this.avgPace.toString());
+					ChallengeView.this.avgPace.setText("Avg Pace: " + ro.avgPaceMinutes + ":" + ro.avgPaceSeconds + " min/km");
+					ChallengeView.this.length.setText("Length: " + df.format(ro.length/1000) + " km");
+					ChallengeView.this.time.setText("Time: " + ro.getHour() +":"+ro.getMinutes()+":"+ro.getSeconds());
+				}
+			}
+
+		}
+
+		@Override
+		public void onProviderDisabled(String provider) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onProviderEnabled(String provider) {
+			// TODO Auto-generated method stub
+
+		}
+
+		@Override
+		public void onStatusChanged(String provider, int status, Bundle extras) {
+			// TODO Auto-generated method stub
+
+		}
+	};
+
+	private ArrayList<ArrayList<Float>> createFakeData() {
+		gpsData = new ArrayList<ArrayList<Float>>();
+		ArrayList<Float> tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784027);
+		tmp.add((float) 12.518684);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.3615378E12);
+		gpsData.add(tmp);
+		tmp = null;
+		tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784327);
+		tmp.add((float) 12.518684);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.361538E12);
+		gpsData.add(tmp);
+		tmp = null;
+		tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784427);
+		tmp.add((float) 12.518684);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.3615382E12);
+		gpsData.add(tmp);
+		tmp = null;
+		tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784427);
+		tmp.add((float) 12.518484);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.3615382E12);
+		gpsData.add(tmp);
+		tmp = null;
+		tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784427);
+		tmp.add((float) 12.518284);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.3615382E12);
+		gpsData.add(tmp);
+		tmp = null;
+		tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784227);
+		tmp.add((float) 12.518384);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.3615383E12);
+		gpsData.add(tmp);
+		tmp = null;
+		tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784127);
+		tmp.add((float) 12.518484);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.3615383E12);
+		gpsData.add(tmp);
+		tmp = null;
+		tmp = new ArrayList<Float>();
+		tmp.add((float) 55.784027);
+		tmp.add((float) 12.518584);
+		tmp.add((float) 20.0);
+		tmp.add((float) 1.3615384E12);
+		gpsData.add(tmp);
+		tmp = null;
+		return gpsData;
 	}
 }

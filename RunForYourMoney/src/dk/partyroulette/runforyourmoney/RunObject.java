@@ -15,6 +15,7 @@ public class RunObject extends Progress
 	int hour;
 	int minutes;
 	int seconds;
+
 	Float length = (float) 0.0; // in meters
 	Float avgPaceMinutes; //in minutes/seconds per km
 	Float avgPaceSeconds; //in minutes/seconds per km
@@ -23,7 +24,46 @@ public class RunObject extends Progress
 	public RunObject (ArrayList<ArrayList<Float>> gpsData)
 	{
 		this.gpsData = gpsData;
-		calcStatistics();
+		if(gpsData == null || gpsData.isEmpty())
+		{
+			//do not calculate statistics
+			return;
+		} else 
+		{
+			calcStatistics();
+		}
+	}
+	
+	public ArrayList<ArrayList<Float>> getGpsData() {
+		return gpsData;
+	}
+
+	public int getHour() {
+		return hour;
+	}
+
+	public int getMinutes() {
+		return minutes;
+	}
+
+	public int getSeconds() {
+		return seconds;
+	}
+
+	public Float getLength() {
+		return length;
+	}
+
+	public Float getAvgPaceMinutes() {
+		return avgPaceMinutes;
+	}
+
+	public Float getAvgPaceSeconds() {
+		return avgPaceSeconds;
+	}
+
+	public Float getAvgSpeed() {
+		return avgSpeed;
 	}
 
 	private void calcStatistics() {

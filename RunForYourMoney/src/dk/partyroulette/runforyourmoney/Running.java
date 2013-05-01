@@ -11,7 +11,7 @@ import android.os.Bundle;
 
 import com.parse.ParseObject;
 
-public class Running extends Activity implements VerificationMethod{
+public class Running implements VerificationMethod{
 	private LocationManager locationManager;
 	private ArrayList<ArrayList<Float>> gpsData;
 	private boolean paused = false;
@@ -19,10 +19,9 @@ public class Running extends Activity implements VerificationMethod{
 	public Running() {
 	}
 
-	@Override
-	public void start() {
+	public void start(Context con) {
 		gpsData = new ArrayList<ArrayList<Float>>();
-		locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		locationManager = (LocationManager) con.getSystemService(Context.LOCATION_SERVICE);
 		//get initial location
 		Location location = locationManager.getLastKnownLocation("network");
 		//receive location updates
