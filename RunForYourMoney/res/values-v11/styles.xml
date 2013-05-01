@@ -12,9 +12,9 @@
 
     <!-- style for the action bar backgrounds -->
     <style name="MyActionBar" parent="@android:style/Widget.Holo.ActionBar">
-        <item name="android:background">#669900</item>
-        <item name="android:backgroundStacked">#669900</item>
-        <item name="android:backgroundSplit">#99CC00</item>
+        <item name="android:background">#0099CC</item>
+        <item name="android:backgroundStacked">#0099CC</item>
+        <item name="android:backgroundSplit">#33B5E5</item>
         <item name="android:titleTextStyle">@style/TitleTextStyle</item>
     </style>
 
