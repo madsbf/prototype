@@ -1,12 +1,18 @@
 package dk.partyroulette.runforyourmoney;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import com.parse.ParseObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -70,20 +76,74 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 	@Override
 	public void onClick(View arg0) 
 	{
-		System.out.println("Challenge clicked");
-		/*
-		Participant[] participants = { 
-				new Participant("Mads", "http://graph.facebook.com/madsbf/picture?type=normal", new IntProgress(2)),
-				new Participant("Du", "http://graph.facebook.com/dunguyen90/picture?type=normal", new IntProgress(3)), 
-				new Participant("Noel", "http://graph.facebook.com/noelvang/picture?type=normal", new IntProgress(0)), 
-				new Participant("Helge", "http://graph.facebook.com/helgemunkjacobsen/picture?type=normal", new IntProgress(5))};
+		// If any of the fields are not filled out an alert shall show.
+		if(editName.getText().toString() == "" || editLength.getText().toString() == "" || editDeadline.getText().toString() == "" || editCoins.getText().toString() == "" || friendsAdded.size() == 0){
+			showAlert("Please fill out all information.");
+			return;
+		}
 		
-		DummyContent.addItem(new ExerciseChallenge(DummyContent.ITEMS.size(), editName.getText().toString(), "Description", new Repetition(Integer.parseInt(editLength.getText().toString())), participants, true));
-		*/
+		// Set date object
+		SimpleDateFormat deadline = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+		Date d = null;
+		try {
+			d = deadline.parse(editDeadline.getText().toString());
+		} catch (ParseException e) {
+			showAlert("Please enter date in the correct format.");
+			return;
+		}
+		
+		// Set participants and corresponding progress objects.
+		Participant[] participants= new Participant[friendsAdded.size()];
+		for(int i = 0; i<participants.length; i++){
+			Participant participant = new Participant(friendsAdded.get(i), " ", new IntProgress(0));
+			participants[i] = participant;
+		}
+		
+		// Save challenge in DB
+		Challenge c = new Challenge(editName.getText().toString(), "challenge", d, participants, true);
+		Challenge.addChallengeToDB(c);
+		
+		// Send push messages to participants
+		for(String n: friendsAdded){
+			Contact.sendNotification("You have been invited to challenge: "+editName.getText().toString(), n.replace(" ", ""));
+		}
 		
 		this.finish();
 	}
 	
+	/**
+	 * Show alert with message.
+	 * @param Message
+	 */
+	private void showAlert(String msg){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				this);
+ 
+			// set title
+			alertDialogBuilder.setTitle("Error");
+ 
+			// set dialog message
+			alertDialogBuilder
+				.setMessage(msg)
+				.setCancelable(false)
+				.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						// if this button is clicked, close
+						// current activity
+					}
+				  });
+ 
+				// create alert dialog
+				AlertDialog alertDialog = alertDialogBuilder.create();
+ 
+				// show it
+				alertDialog.show();
+	}
+	
+	/**
+	 * Add contact to list of added contacts
+	 * @param arg0
+	 */
 	public void addClicked(View arg0) 
 	{
 		System.out.println("Add Clicked");
@@ -97,6 +157,10 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 	}
 	
 	
+	/**
+	 * Remove contact from list of added contacts.
+	 * @param arg0
+	 */
 	public void removeClicked(View arg0) 
 	{
 		System.out.println("Remove Clicked");
@@ -108,6 +172,9 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		
 	}
 	
+	/**
+	 * This is where the list of all added contacts are generated.
+	 */
 	private void setAddedList(){
 		if(friendsAdded.size() == 0){
 			List<String> friendsEmpty = new ArrayList<String>();
@@ -121,7 +188,10 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,tmp.toArray());
 		addedFriends.setAdapter(adapter);
 	}
-
+	
+	/**
+	 * Is called when all contacts has been retrieved from DB. 
+	 */
 	@Override
 	public void onRetrievedContactObject(List<Contact> contacts) {
 		List<String> names = new ArrayList<String>();
