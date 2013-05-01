@@ -6,6 +6,31 @@
 
     <LinearLayout
         android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Name:"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <EditText
+            android:id="@+id/editName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:ems="10"
+            android:hint="Type challenge name">
+
+            <requestFocus />
+        </EditText>
+
+    </LinearLayout>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical" >
 
@@ -18,37 +43,11 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <Spinner
-            android:id="@+id/spinner1"
+            android:id="@+id/spinnerType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:entries="@array/challenge_types" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <TextView
-            android:id="@+id/textUpperBound"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Repetitions:"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <EditText
-            android:id="@+id/editText1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:ems="10"
-            android:inputType="number"
-            android:text="2" >
-
-            <requestFocus />
-        </EditText>
-
     </LinearLayout>
 
     <LinearLayout
@@ -64,13 +63,13 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/EditText01"
+            android:id="@+id/editLength"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="number"
-            android:text="5" />
+            android:hint="Length in km"
+            android:inputType="number" />
 
     </LinearLayout>
 
@@ -87,12 +86,14 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/EditText02"
+            android:id="@+id/editDeadline"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
+            android:hint="Choose deadline"
             android:inputType="date" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -108,13 +109,13 @@
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <EditText
-            android:id="@+id/EditText03"
+            android:id="@+id/editCoins"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:ems="10"
-            android:inputType="number"
-            android:text="150" />
+            android:hint="Amount of coins to bet"
+            android:inputType="number" />
 
     </LinearLayout>
 

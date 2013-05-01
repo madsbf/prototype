@@ -7,24 +7,13 @@
 
     <!-- Item Name -->
 
-    <TextView
-        android:id="@+id/textName"
-        android:layout_width="wrap_content"
-        android:layout_height="26dip"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:ellipsize="marquee"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/textProgress"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/layoutChallenge"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textName"
-        android:text="Progress:"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:orientation="vertical" >
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/layoutProgress"
@@ -33,13 +22,5 @@
         android:orientation="vertical" >
 
     </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonStart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textProgress"
-        android:layout_centerHorizontal="true"
-        android:text="Start" />
 
 </LinearLayout>

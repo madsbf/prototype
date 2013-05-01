@@ -20,6 +20,8 @@ import dk.partyroulette.runforyourmoney.DummyContent;
  */
 public class ChallengeListFragment extends ListFragment 
 {
+	
+	private ChallengeListAdapter adapter;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -72,9 +74,17 @@ public class ChallengeListFragment extends ListFragment
 		super.onCreate(savedInstanceState);
 
 		// TODO: replace with a real list adapter.
-		setListAdapter(new ChallengeListAdapter(getActivity(),
-				android.R.id.text1, DummyContent.ITEMS));
+		adapter = new ChallengeListAdapter(getActivity(),
+				android.R.id.text1, DummyContent.ITEMS);
+		setListAdapter(adapter);
 	}
+	
+	@Override
+	  public void onResume() 
+	{
+	     super.onResume();
+	     adapter.notifyDataSetChanged();
+	  }
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {

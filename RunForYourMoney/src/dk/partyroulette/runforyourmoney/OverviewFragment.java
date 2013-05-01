@@ -36,9 +36,9 @@ public class OverviewFragment extends Fragment
 
 		textName.setText(DummyContent.PROFILE.getName());
 		textChallenges.setText("Current challenges: " + DummyContent.ITEMS.size());
-		
+
 		new ImageLoader(imageProfile).execute();
-		
+
 		return rootView;
 	}
 
