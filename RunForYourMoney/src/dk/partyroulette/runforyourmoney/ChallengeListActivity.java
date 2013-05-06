@@ -8,6 +8,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
@@ -200,6 +201,12 @@ public class ChallengeListActivity extends FragmentActivity implements
 		}
 	    
 		Contact.addContactToDB(new Contact(firstNameText.getText().toString(),lastNameText.getText().toString()));
+		//add name to shared preferences
+		SharedPreferences settings = getApplicationContext().getSharedPreferences("runforyourmoney", 0);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putString("name", firstNameText.getText().toString() + " " + lastNameText.getText().toString());
+		editor.commit();
+		
 		setContentView(R.layout.activity_challenge_list);
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(lastNameText.getWindowToken(), 0);

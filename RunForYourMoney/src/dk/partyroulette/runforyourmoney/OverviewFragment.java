@@ -1,6 +1,7 @@
 package dk.partyroulette.runforyourmoney;
 
 import android.support.v4.app.Fragment;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,7 +37,15 @@ public class OverviewFragment extends Fragment
 		TextView textName = (TextView) rootView.findViewById(R.id.textName);
 		TextView textChallenges = (TextView) rootView.findViewById(R.id.textChallenges);
 
-		textName.setText(DummyContent.PROFILE.getName());
+		//textName.setText(DummyContent.PROFILE.getName());
+		SharedPreferences settings = getActivity().getApplicationContext().getSharedPreferences("runforyourmoney", 0);
+		String name = settings.getString("name", "");
+		if(!name.equals(""))
+		{
+			textName.setText(name);
+		} else {
+			textName.setText(DummyContent.PROFILE.getName()); //probably need a better strategy here.
+		}
 		textChallenges.setText("Current challenges: " + DummyContent.ITEMS.size());
 
 		new ImageLoader(imageProfile).execute();
