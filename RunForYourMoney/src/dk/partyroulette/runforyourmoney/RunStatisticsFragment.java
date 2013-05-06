@@ -37,6 +37,6 @@ public class RunStatisticsFragment extends Fragment
 		avgSpeed.setText("Avg Speed: "+ df.format(r.getAvgSpeed()) + " km/h");
 		
 		TextView avgPace = (TextView) getView().findViewById(R.id.statsAvgPace);
-		avgPace.setText("Avg Pace: " + r.getAvgPaceMinutes()+ ":" + r.getAvgPaceSeconds() + "min/km");
+		avgPace.setText("Avg Pace: " + ((int) Math.round(r.getAvgPaceMinutes()))+ ":" + ((int) Math.round(r.getAvgPaceSeconds())) + " min/km");
 	}
 }

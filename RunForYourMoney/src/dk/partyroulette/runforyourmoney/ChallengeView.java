@@ -420,6 +420,7 @@ public class ChallengeView implements OnClickListener
 				gpsData.add("gpsCoord", gpsObject);
 				//TODO: add challenge id to GPS data
 			}
+			gpsData.put("owner", fullname);
 			gpsData.saveInBackground();
 		}
 		stopButton.setVisibility(View.INVISIBLE);
@@ -452,7 +453,7 @@ public class ChallengeView implements OnClickListener
 				if(ro.getLength()!=0.0)
 				{
 					System.out.println(ChallengeView.this.avgPace.toString());
-					ChallengeView.this.avgPace.setText("Avg Pace: " + ro.getAvgPaceMinutes() + ":" + ro.getAvgPaceSeconds() + " min/km");
+					ChallengeView.this.avgPace.setText("Avg Pace: " + ((int)Math.round(ro.getAvgPaceMinutes())) + ":" + ((int) Math.round(ro.getAvgPaceSeconds())) + " min/km");
 					ChallengeView.this.length.setText("Length: " + df.format(ro.getLength()/1000) + " km");
 					ChallengeView.this.time.setText("Time: " + ro.getHour() +":"+ro.getMinutes()+":"+ro.getSeconds());
 				}

@@ -1,15 +1,16 @@
 package dk.partyroulette.runforyourmoney.datalayer;
 
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
-import android.app.Activity;
 import android.location.Location;
 /**
  * This class only contains data. When initiated it calculates some additional statistics about the run.
  * @author Du
  *
  */
-public class RunObject extends Progress
+public class RunObject extends Progress implements Serializable
 {
 	ArrayList<ArrayList<Float>> gpsData;
 	int hour;
@@ -19,11 +20,27 @@ public class RunObject extends Progress
 	Float length = (float) 0.0; // in meters
 	Float avgPaceMinutes; //in minutes/seconds per km
 	Float avgPaceSeconds; //in minutes/seconds per km
-	Float avgSpeed; // in km pr hour 
+	Float avgSpeed; // in km pr hour
+	
+	private Date runAt = null;
 	
 	public RunObject (ArrayList<ArrayList<Float>> gpsData)
 	{
 		this.gpsData = gpsData;
+		if(gpsData == null || gpsData.isEmpty())
+		{
+			//do not calculate statistics
+			return;
+		} else 
+		{
+			calcStatistics();
+		}
+	}
+	
+	public RunObject (ArrayList<ArrayList<Float>> gpsData, Date createdAt)
+	{
+		this.gpsData = gpsData;
+		runAt = createdAt;
 		if(gpsData == null || gpsData.isEmpty())
 		{
 			//do not calculate statistics
@@ -104,6 +121,14 @@ public class RunObject extends Progress
 	protected int getProgressInt() 
 	{
 		return Math.round(length / 1000);
+	}
+
+	public Date getRunAt() {
+		return runAt;
+	}
+
+	public void setRunAt(Date runAt) {
+		this.runAt = runAt;
 	}
 
 

@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -48,7 +49,7 @@ import dk.partyroulette.runforyourmoney.datalayer.Participant;
  * selections.
  */
 public class ChallengeListActivity extends FragmentActivity implements
-		ChallengeListFragment.Callbacks, RetrievedObjectListener {
+		ChallengeListFragment.Callbacks, RetrievedObjectListener{
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -132,6 +133,9 @@ public class ChallengeListActivity extends FragmentActivity implements
 				Intent detailIntent = new Intent(this,
 						AddChallengeActivity.class);
 				startActivity(detailIntent);
+			case R.id.item3:
+				Intent intent = new Intent(this, ProfileActivity.class);
+				startActivity(intent);
 			}			
 		}
 		return true;
@@ -275,4 +279,5 @@ public class ChallengeListActivity extends FragmentActivity implements
 		// TODO Auto-generated method stub
 		
 	}
+
 }

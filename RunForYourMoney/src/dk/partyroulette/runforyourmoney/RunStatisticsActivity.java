@@ -23,13 +23,16 @@ public class RunStatisticsActivity extends Activity
 {
 	private GoogleMap rMap;
 	private ArrayList<ArrayList<Float>> gpsData;
+	private RunObject runObject;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_run_statistics);
 	    getActionBar().setDisplayHomeAsUpEnabled(true);
-	    //debug purposes
-	    createFakeData();
+	    
+	    Intent intent = getIntent();
+	    runObject = (RunObject) intent.getSerializableExtra("runObject");
+	    gpsData = runObject.getGpsData();
 	    
 	    drawOnMap();
 	    

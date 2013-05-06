@@ -1,19 +1,21 @@
 package dk.partyroulette.runforyourmoney;
 
 import android.support.v4.app.Fragment;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import dk.partyroulette.runforyourmoney.control.*;
 import dk.partyroulette.runforyourmoney.R;
 
-public class OverviewFragment extends Fragment 
+public class OverviewFragment extends Fragment
 {
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
