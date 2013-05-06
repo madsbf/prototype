@@ -55,7 +55,7 @@ public class DummyContent {
 		ITEM_MAP.put(item.getId(), item);
 	}
 
-	private static ArrayList<ArrayList<Float>> getFakeGpsData() 
+	public static ArrayList<ArrayList<Float>> getFakeGpsData() 
 	{
 		ArrayList<ArrayList<Float>> gpsData = new ArrayList<ArrayList<Float>>();
 	    ArrayList<Float> tmp = new ArrayList<Float>();

@@ -42,6 +42,7 @@ public class ChallengeView implements OnClickListener
 
 	private Button startButton;
 	private Button stopButton;
+	private Button debugButton;
 	
 	private TextView avgPace;
 	private TextView length;
@@ -113,7 +114,9 @@ public class ChallengeView implements OnClickListener
 			startButton.setOnClickListener(this);
 			stopButton = (Button) challengeView.findViewById(R.id.buttonStop);
 			stopButton.setOnClickListener(this);
-
+			debugButton = (Button) challengeView.findViewById(R.id.buttonDebug);
+			debugButton.setOnClickListener(this);
+			
 			layoutChallenge.addView(challengeView);
 		}
 
@@ -362,6 +365,9 @@ public class ChallengeView implements OnClickListener
 		} else if (view.getId() == R.id.buttonStop)
 		{
 			end();
+		} else if (view.getId() == R.id.buttonDebug)
+		{
+			gpsData = DummyContent.getFakeGpsData();
 		}
 	}
 
@@ -397,17 +403,22 @@ public class ChallengeView implements OnClickListener
 		//prepare dataobject
 		RunObject ro = new RunObject(gpsData);
 		//RunObject ro = new RunObject(createFakeData()); DEBUG
+		//get name
+		String fullname = Contact.getCurrentUser();
+		
 		if(ro.getLength()!=0.0)
 		{
+			//TODO: add challenge id to name
 			ParseObject gpsData = new ParseObject("GPSData");
 			for(ArrayList<Float> gpsCoord : ro.getGpsData())
 			{
-				ParseObject gpsObject = new ParseObject("GPS");
+				ParseObject gpsObject = new ParseObject("GPS_" + fullname);
 				gpsObject.put("lat",gpsCoord.get(0));
 				gpsObject.put("ln", gpsCoord.get(1));
 				gpsObject.put("acc", gpsCoord.get(2));
 				gpsObject.put("time", gpsCoord.get(3));
 				gpsData.add("gpsCoord", gpsObject);
+				//TODO: add challenge id to GPS data
 			}
 			gpsData.saveInBackground();
 		}
@@ -468,64 +479,4 @@ public class ChallengeView implements OnClickListener
 		}
 	};
 
-	private ArrayList<ArrayList<Float>> createFakeData() {
-		gpsData = new ArrayList<ArrayList<Float>>();
-		ArrayList<Float> tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784027);
-		tmp.add((float) 12.518684);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.3615378E12);
-		gpsData.add(tmp);
-		tmp = null;
-		tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784327);
-		tmp.add((float) 12.518684);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.361538E12);
-		gpsData.add(tmp);
-		tmp = null;
-		tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784427);
-		tmp.add((float) 12.518684);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.3615382E12);
-		gpsData.add(tmp);
-		tmp = null;
-		tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784427);
-		tmp.add((float) 12.518484);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.3615382E12);
-		gpsData.add(tmp);
-		tmp = null;
-		tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784427);
-		tmp.add((float) 12.518284);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.3615382E12);
-		gpsData.add(tmp);
-		tmp = null;
-		tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784227);
-		tmp.add((float) 12.518384);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.3615383E12);
-		gpsData.add(tmp);
-		tmp = null;
-		tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784127);
-		tmp.add((float) 12.518484);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.3615383E12);
-		gpsData.add(tmp);
-		tmp = null;
-		tmp = new ArrayList<Float>();
-		tmp.add((float) 55.784027);
-		tmp.add((float) 12.518584);
-		tmp.add((float) 20.0);
-		tmp.add((float) 1.3615384E12);
-		gpsData.add(tmp);
-		tmp = null;
-		return gpsData;
-	}
 }
