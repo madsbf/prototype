@@ -133,9 +133,11 @@ public class ChallengeListActivity extends FragmentActivity implements
 				Intent detailIntent = new Intent(this,
 						AddChallengeActivity.class);
 				startActivity(detailIntent);
+				break;
 			case R.id.item3:
 				Intent intent = new Intent(this, ProfileActivity.class);
 				startActivity(intent);
+				break;
 			}			
 		}
 		return true;
