@@ -1,16 +1,17 @@
 package dk.partyroulette.runforyourmoney.datalayer;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 import android.location.Location;
+import android.os.Parcel;
+import android.os.Parcelable;
 /**
  * This class only contains data. When initiated it calculates some additional statistics about the run.
  * @author Du
  *
  */
-public class RunObject extends Progress implements Serializable
+public class RunObject extends Progress implements Parcelable
 {
 	ArrayList<ArrayList<Float>> gpsData;
 	int hour;
@@ -131,5 +132,49 @@ public class RunObject extends Progress implements Serializable
 		this.runAt = runAt;
 	}
 
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) 
+	{	
+		dest.writeList(gpsData);
+		dest.writeInt(hour);
+		dest.writeInt(minutes);
+		dest.writeInt(seconds);
+		dest.writeFloat(length);
+		dest.writeFloat(avgPaceMinutes);
+		dest.writeFloat(avgPaceSeconds);
+		dest.writeFloat(avgSpeed);
+		dest.writeValue(runAt);
+	}
+	
+	public static final Parcelable.Creator<RunObject> CREATOR = new Parcelable.Creator<RunObject>() {
+		public RunObject createFromParcel(Parcel in)
+		{
+			return new RunObject(in);
+		}
+		
+		public RunObject[] newArray(int size) 
+		{
+			return new RunObject[size];
+		}
+	};
+	
+	private RunObject(Parcel in)
+	{
+		gpsData = new ArrayList<ArrayList<Float>>();
+		in.readList(gpsData, null);
+		hour = in.readInt();
+		minutes = in.readInt();
+		seconds = in.readInt();
+		length = in.readFloat();
+		avgPaceMinutes = in.readFloat();
+		avgPaceSeconds = in.readFloat();
+		avgSpeed = in.readFloat();
+		runAt = (Date) in.readValue(null);
+	}
 
 }

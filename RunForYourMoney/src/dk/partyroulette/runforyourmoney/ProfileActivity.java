@@ -1,13 +1,15 @@
 package dk.partyroulette.runforyourmoney;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import dk.partyroulette.runforyourmoney.datalayer.RunObject;
 
@@ -18,6 +20,8 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		//a little hack? why isn't this automatically set to the activity title?
+		getActionBar().setTitle("Profile");
 	}
 
 
@@ -30,6 +34,13 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 		this.runObjects = runObjects;
 	}
 
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+	    MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.statsmenu, menu);
+	    return true;
+	}
+	
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
@@ -42,7 +53,16 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 			//
 			this.finish();
 			return true;
+		case R.id.detailedstats:
+			if(runObjects!=null && runObjects.size()!=0)
+			{
+				Intent intent = new Intent(this.getApplicationContext(), StatsActivity.class);
+				intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
+				startActivity(intent);
+			}
+			break;
 		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 	@Override
