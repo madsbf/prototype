@@ -31,7 +31,7 @@ public class RunStatisticsActivity extends Activity
 	    getActionBar().setDisplayHomeAsUpEnabled(true);
 	    
 	    Intent intent = getIntent();
-	    runObject = (RunObject) intent.getSerializableExtra("runObject");
+	    runObject = (RunObject) intent.getParcelableExtra("runObject");
 	    gpsData = runObject.getGpsData();
 	    
 	    drawOnMap();
