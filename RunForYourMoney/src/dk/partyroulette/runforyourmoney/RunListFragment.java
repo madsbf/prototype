@@ -51,6 +51,7 @@ public class RunListFragment extends ListFragment
 		 * Callback for when an item has been selected.
 		 */
 		public void onItemSelected(RunObject runObject);
+		public void setRunObjects(List<RunObject> runObjects);
 	}
 
 	/**
@@ -59,6 +60,11 @@ public class RunListFragment extends ListFragment
 	 */
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 		public void onItemSelected(RunObject runObject) {		
+		}
+
+		@Override
+		public void setRunObjects(List<RunObject> runObjects) {
+			
 		}
 	};
 	
@@ -108,6 +114,8 @@ public class RunListFragment extends ListFragment
 						
 						runObjects.add(new RunObject(gpsDataSort(run),p.getCreatedAt()));
 					}
+					//update runObjects in ProfileActivity
+					mCallbacks.setRunObjects(runObjects);
 				} else {
 					Log.d("Error retrieving GPS data for user " + Contact.getCurrentUser(), e.getMessage());
 				}

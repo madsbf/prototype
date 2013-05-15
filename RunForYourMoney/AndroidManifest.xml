@@ -3,7 +3,6 @@
     package="dk.partyroulette.runforyourmoney"
     android:versionCode="1"
     android:versionName="1.0" >
-
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="17" />
@@ -60,6 +59,7 @@
         <activity android:name="RunStatisticsActivity"></activity>
         <activity android:name="RunStasticsFragment"></activity>
         <activity android:name="ProfileActivity"></activity>
+        <activity android:name="StatsActivity"></activity>
         
         <meta-data
     android:name="com.google.android.maps.v2.API_KEY"
