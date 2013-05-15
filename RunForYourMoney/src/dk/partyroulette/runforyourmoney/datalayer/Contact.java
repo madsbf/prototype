@@ -107,7 +107,7 @@ public class Contact {
 		contact.saveInBackground();
 		// Save user name settings into installation table
 		ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-		installation.put("fullname",c.FirstName+c.LastName);
+		installation.put("fullname",c.FirstName+" "+c.LastName);
 		installation.saveInBackground();
 		
 	}

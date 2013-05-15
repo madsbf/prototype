@@ -2,6 +2,7 @@ package dk.partyroulette.runforyourmoney;
 
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -57,6 +58,7 @@ public class ChallengeListActivity extends FragmentActivity implements
 	 * device.
 	 */
 	private boolean mTwoPane;
+	private static ChallengeListFragment challengeListFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -103,10 +105,13 @@ public class ChallengeListActivity extends FragmentActivity implements
 
 			// In two-pane mode, list items should be given the
 			// 'activated' state when touched.
-			((ChallengeListFragment) getSupportFragmentManager()
-					.findFragmentById(R.id.challenge_list))
-					.setActivateOnItemClick(true);
+			challengeListFragment = ((ChallengeListFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.challenge_list));
+					
+			challengeListFragment.setActivateOnItemClick(true);
 		}
+		
+		//this.challengeListFragment = (ChallengeListFragment) getFragmentManager().findFragmentById(R.id.challenge_list);
 
 		// TODO: If exposing deep links into your app, handle intents here.
 	}
@@ -231,15 +236,16 @@ public class ChallengeListActivity extends FragmentActivity implements
 		System.out.println("RETRIEVED CHALLENGES"+Integer.toString(challenges.size()));
 		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");  
 		
-		// TODO ALSO SHOW CHALLENGES THAT ARE ACCEPTED
 		
 		for(Challenge c: challenges){
 			for(Participant p: c.getParticipants()){
-				if(p.getName().replace(" ", "").equals(Contact.getCurrentUser()) && !p.getAccepted()){
+				if(p.getName().equals(Contact.getCurrentUser()) && !p.getAccepted()){
 					showAcceptChallengeAlert(c.getChallengeOwner()+" has challenged you to run "+c.getLength()+" km. before "+df.format(c.getDeadline())+".",c.getIdentifier());
 				}
 			}
 		}
+		
+		
 	}
 	
 	private void showAcceptChallengeAlert(String msg, final String identifier){

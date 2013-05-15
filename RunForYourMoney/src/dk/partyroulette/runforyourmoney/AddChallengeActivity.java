@@ -7,6 +7,7 @@ import dk.partyroulette.runforyourmoney.datalayer.*;
 import dk.partyroulette.runforyourmoney.control.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +19,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -90,20 +92,28 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		
 		// Set date object
 		SimpleDateFormat deadline = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+		Date date = new Date();
+		deadline.setLenient(false);
 		Date d = null;
 		try {
 			d = deadline.parse(editDeadline.getText().toString());
+			if(d.getTime() < date.getTime()){
+				showAlert("Please enter date in the future.");
+				return;
+			}
 		} catch (ParseException e) {
 			showAlert("Please enter date in the correct format.");
 			return;
 		}
 		
 		// Set participants and corresponding progress objects.
-		Participant[] participants= new Participant[friendsAdded.size()];
-		for(int i = 0; i<participants.length; i++){
-			Participant participant = new Participant(friendsAdded.get(i), " ", new IntProgress(0),false);
+		Participant[] participants= new Participant[friendsAdded.size()+1];
+		for(int i = 0; i<participants.length-1; i++){
+			Participant participant = new Participant(friendsAdded.get(i), "http://graph.facebook.com/dunguyen90/picture?type=normal", new IntProgress(0),false);
 			participants[i] = participant;
 		}
+		Participant p = new Participant(Contact.getCurrentUser(), "http://graph.facebook.com/dunguyen90/picture?type=normal", new IntProgress(0),true);
+		participants[friendsAdded.size()] = p;
 		
 		// Save challenge in DB
 		Challenge c = new Challenge(editName.getText().toString(), "challenge", d, participants, true, Integer.parseInt(editLength.getText().toString()),Contact.getCurrentUser());
@@ -111,7 +121,7 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		
 		// Send push messages to participants
 		for(String n: friendsAdded){
-			Contact.sendNotification("You have been invited to challenge: "+editName.getText().toString(), n.replace(" ", ""));
+			Contact.sendNotification("You have been invited to challenge: "+editName.getText().toString(), n);
 		}
 		
 		this.finish();
@@ -190,6 +200,7 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 			return;
 		}
 		List<String> tmp = friendsAdded;
+		
 		Collections.reverse(tmp);
 		ArrayAdapter adapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item,tmp.toArray());
 		addedFriends.setAdapter(adapter);
@@ -202,7 +213,11 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 	public void onRetrievedContactObject(List<Contact> contacts) {
 		List<String> names = new ArrayList<String>();
 		for(Contact c: contacts){
-			names.add(c.getFirstName()+" "+c.getLastName());
+			String contactName = c.getFirstName()+" "+c.getLastName();
+			if(contactName.equals(Contact.getCurrentUser())){
+				continue;
+			}
+			names.add(contactName);
 		}
 		names.add(0,"Add friends to challenge...");
 		

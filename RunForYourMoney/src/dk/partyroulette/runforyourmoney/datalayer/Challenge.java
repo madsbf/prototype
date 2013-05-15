@@ -176,7 +176,7 @@ public class Challenge{
 			// Check if user of app is participant in challenge
 			List<String> tmp = new ArrayList<String>();
 			for(String n: participantNames){
-				tmp.add(n.replace(" ", ""));
+				tmp.add(n);
 			}
 			if(!tmp.contains(user)){
 				continue;
@@ -187,6 +187,9 @@ public class Challenge{
 			
 			List<Participant> participants = new ArrayList<Participant>();
 			for(int i = 0; i<participantNames.size(); i++){
+				System.out.println(participantNames.get(i));
+				System.out.println(participantImageUrls.get(i));
+				System.out.println(participantProgresses.get(i));
 				Participant p = new Participant(participantNames.get(i), participantImageUrls.get(i), new IntProgress(Integer.parseInt(participantProgresses.get(i))),Boolean.parseBoolean(participantAccepted.get(i)));
 				participants.add(p);
 			}

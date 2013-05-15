@@ -1,5 +1,10 @@
 package dk.partyroulette.runforyourmoney;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.parse.ParseObject;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -8,6 +13,16 @@ import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import dk.partyroulette.runforyourmoney.R;
+import dk.partyroulette.runforyourmoney.control.RetrievedObjectListener;
+import dk.partyroulette.runforyourmoney.datalayer.Challenge;
+import dk.partyroulette.runforyourmoney.datalayer.Contact;
+import dk.partyroulette.runforyourmoney.datalayer.ExerciseChallenge;
+import dk.partyroulette.runforyourmoney.datalayer.HealthChallenge;
+import dk.partyroulette.runforyourmoney.datalayer.IntProgress;
+import dk.partyroulette.runforyourmoney.datalayer.LearningChallenge;
+import dk.partyroulette.runforyourmoney.datalayer.Participant;
+import dk.partyroulette.runforyourmoney.datalayer.Repetition;
+import dk.partyroulette.runforyourmoney.datalayer.RunObject;
 
 /**
  * A list fragment representing a list of Challenges. This fragment also
@@ -18,7 +33,7 @@ import dk.partyroulette.runforyourmoney.R;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ChallengeListFragment extends ListFragment
+public class ChallengeListFragment extends ListFragment implements RetrievedObjectListener
 {
 	
 	private ChallengeListAdapter adapter;
@@ -72,11 +87,19 @@ public class ChallengeListFragment extends ListFragment
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		
 		// TODO: replace with a real list adapter.
 		adapter = new ChallengeListAdapter(getActivity(),
 				android.R.id.text1, DummyContent.ITEMS);
 		setListAdapter(adapter);
+		
+		
+		Challenge.retrieveChallengesFromDBForUser(this, Contact.getCurrentUser());
+
 	}
+	
+	
+	
 	
 	@Override
 	  public void onResume() 
@@ -136,6 +159,8 @@ public class ChallengeListFragment extends ListFragment
 			outState.putInt(STATE_ACTIVATED_POSITION, mActivatedPosition);
 		}
 	}
+	
+	
 
 	/**
 	 * Turns on activate-on-click mode. When this mode is on, list items will be
@@ -157,5 +182,50 @@ public class ChallengeListFragment extends ListFragment
 		}
 
 		mActivatedPosition = position;
+	}
+
+	@Override
+	public void onRetrievedContactObject(List<Contact> contacts) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onRetrievedChallengeObjects(List<Challenge> challenges) {
+		System.out.println("LENGTH OF CHALLENGES: "+challenges.size());
+		
+		List<Challenge> ITEMS = new ArrayList<Challenge>();
+
+		for(Challenge c: challenges){
+			System.out.println("BLABLABLA");
+			System.out.println(c.getName());
+			System.out.println(c.getDescription());
+			
+			
+			ExerciseChallenge exerciseChallenge = new ExerciseChallenge(1l, c.getName(), c.getDescription(), new Repetition(c.getLength()), c.getParticipants(), true);
+			ITEMS.add(exerciseChallenge);
+		}
+		
+		adapter = new ChallengeListAdapter(getActivity(), android.R.id.text1, ITEMS);
+		setListAdapter(adapter);
+		/*
+		Participant[] participants1 = { 
+				new Participant("Du", "http://graph.facebook.com/dunguyen90/picture?type=normal", new IntProgress(3)), 
+				new Participant("Noel", "http://graph.facebook.com/noelvang/picture?type=normal", new IntProgress(0)), 
+				new Participant("Helge", "http://graph.facebook.com/helgemunkjacobsen/picture?type=normal", new IntProgress(5))};
+		
+		ITEMS.add(new ExerciseChallenge(1l, "5km run", "Run 5km before the 23rd of april.", new Repetition(5), participants1, true));
+		
+		
+		adapter = new ChallengeListAdapter(getActivity(),
+				android.R.id.text1, ITEMS);
+		setListAdapter(adapter);
+		*/
+	}
+
+	@Override
+	public void onRetrievedObject(List<ParseObject> obj) {
+		// TODO Auto-generated method stub
+		
 	}
 }
