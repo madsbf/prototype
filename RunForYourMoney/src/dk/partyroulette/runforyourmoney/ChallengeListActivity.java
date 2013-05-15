@@ -49,7 +49,8 @@ import dk.partyroulette.runforyourmoney.datalayer.Participant;
  * selections.
  */
 public class ChallengeListActivity extends FragmentActivity implements
-		ChallengeListFragment.Callbacks, RetrievedObjectListener{
+		ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callbacks
+		{
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -133,9 +134,11 @@ public class ChallengeListActivity extends FragmentActivity implements
 				Intent detailIntent = new Intent(this,
 						AddChallengeActivity.class);
 				startActivity(detailIntent);
+				break;
 			case R.id.item3:
 				Intent intent = new Intent(this, ProfileActivity.class);
 				startActivity(intent);
+				break;
 			}			
 		}
 		return true;
@@ -278,6 +281,13 @@ public class ChallengeListActivity extends FragmentActivity implements
 	public void onRetrievedObject(List<ParseObject> obj) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void onProfileSelected() 
+	{
+		Intent intent = new Intent(this, ProfileActivity.class);
+		startActivity(intent);
 	}
 
 }

@@ -1,6 +1,5 @@
 package dk.partyroulette.runforyourmoney;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +10,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import dk.partyroulette.runforyourmoney.datalayer.RunObject;
 
-public class ProfileActivity extends FragmentActivity implements RunListFragment.Callbacks
+public class ProfileActivity extends FragmentActivity implements RunListFragment.Callbacks, OverviewFragment.Callbacks
 {
 	private List<RunObject> runObjects = new ArrayList<RunObject>();
 	public void onCreate(Bundle savedInstanceState) {
@@ -19,8 +18,6 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 		setContentView(R.layout.activity_profile);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
-
-
 
 	public List<RunObject> getRunObjects() {
 		return runObjects;
@@ -56,5 +53,11 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 		} else {
 			Log.e("ProfileActivity", "runObject is null");
 		}
+	}
+
+	@Override
+	public void onProfileSelected() 
+	{
+		// Already in profile view
 	}
 }

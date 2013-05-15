@@ -91,7 +91,7 @@ public class ChallengeView implements OnClickListener
 		Activity activity = (Activity) context;
 		activity.setTitle(challenge.getName());
 		activity.getActionBar().setIcon(imageResourceId);
-		activity.getActionBar().setBackgroundDrawable(new ColorDrawable(primaryColor));
+		// activity.getActionBar().setBackgroundDrawable(new ColorDrawable(primaryColor));
 
 		LayoutInflater inflater = activity.getLayoutInflater();
 

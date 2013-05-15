@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import dk.partyroulette.runforyourmoney.R;
@@ -17,7 +18,7 @@ import dk.partyroulette.runforyourmoney.R;
  * Activities containing this fragment MUST implement the {@link Callbacks}
  * interface.
  */
-public class ChallengeListFragment extends ListFragment 
+public class ChallengeListFragment extends ListFragment
 {
 	
 	private ChallengeListAdapter adapter;
@@ -57,8 +58,7 @@ public class ChallengeListFragment extends ListFragment
 	 */
 	private static Callbacks sDummyCallbacks = new Callbacks() {
 		@Override
-		public void onItemSelected(Long id) {
-		}
+		public void onItemSelected(Long id) {}
 	};
 
 	/**

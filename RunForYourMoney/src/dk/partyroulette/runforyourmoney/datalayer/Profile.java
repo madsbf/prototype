@@ -4,11 +4,13 @@ public class Profile {
 
 	private String name;
 	private String imageUrl;
+	private int coins;
 	
-	public Profile(String name, String imageUrl)
+	public Profile(String name, String imageUrl, int coins)
 	{
 		this.name = name;
 		this.imageUrl = imageUrl;
+		this.coins = coins;
 	}
 	
 	public String getName()
@@ -19,5 +21,10 @@ public class Profile {
 	public String getImageUrl()
 	{
 		return imageUrl;
+	}
+	
+	public int getCoins()
+	{
+		return coins;
 	}
 }
