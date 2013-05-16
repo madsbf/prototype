@@ -2,10 +2,7 @@ package dk.partyroulette.runforyourmoney;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import dk.partyroulette.runforyourmoney.R;
-import com.parse.ParseObject;
-import dk.partyroulette.runforyourmoney.datalayer.*;
-import dk.partyroulette.runforyourmoney.control.*;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.ColorMatrix;
 import android.graphics.ColorMatrixColorFilter;
 import android.graphics.LightingColorFilter;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
@@ -29,6 +25,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.parse.ParseObject;
+
+import dk.partyroulette.runforyourmoney.control.BitmapUtilities;
+import dk.partyroulette.runforyourmoney.datalayer.Challenge;
+import dk.partyroulette.runforyourmoney.datalayer.Contact;
+import dk.partyroulette.runforyourmoney.datalayer.ExerciseChallenge;
+import dk.partyroulette.runforyourmoney.datalayer.HealthChallenge;
+import dk.partyroulette.runforyourmoney.datalayer.LearningChallenge;
+import dk.partyroulette.runforyourmoney.datalayer.MiscChallenge;
+import dk.partyroulette.runforyourmoney.datalayer.Participant;
+import dk.partyroulette.runforyourmoney.datalayer.RunObject;
 
 public class ChallengeView implements OnClickListener
 {

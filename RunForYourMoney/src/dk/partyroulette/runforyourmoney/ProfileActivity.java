@@ -17,6 +17,8 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 {
 	private List<RunObject> runObjects = new ArrayList<RunObject>();
 	public void onCreate(Bundle savedInstanceState) {
+		Intent intent = getIntent();
+		runObjects = intent.getParcelableArrayListExtra("runObjects");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -51,14 +53,7 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 			//
 			this.finish();
 			return true;
-		case R.id.detailedstats:
-			if(runObjects!=null && runObjects.size()!=0)
-			{
-				Intent intent = new Intent(this.getApplicationContext(), StatsActivity.class);
-				intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
-				startActivity(intent);
-			}
-			break;
+		
 		}
 		
 		return super.onOptionsItemSelected(item);

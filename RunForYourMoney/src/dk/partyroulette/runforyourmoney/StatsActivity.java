@@ -7,7 +7,6 @@ import java.util.List;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -94,7 +93,7 @@ public class StatsActivity extends FragmentActivity
 				Date d = ro.getRunAt();
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(d);
-				visualization +="['"+ cal.get(Calendar.DAY_OF_MONTH)+"/" + cal.get(Calendar.MONTH)+"', " + ro.getAvgSpeed()+ "],"; 
+				visualization +="['"+ cal.get(Calendar.DAY_OF_MONTH)+"/" + (cal.get(Calendar.MONTH)+1)+"', " + ro.getAvgSpeed()+ "],"; 
 			}
 		} else if(type ==2)
 		{
@@ -106,7 +105,7 @@ public class StatsActivity extends FragmentActivity
 				Calendar cal = Calendar.getInstance();
 				cal.setTime(d);
 				cumLength+=ro.getLength()/1000;
-				visualization +="['"+ cal.get(Calendar.DAY_OF_MONTH)+"/" + cal.get(Calendar.MONTH)+"', " + cumLength + "],"; 
+				visualization +="['"+ cal.get(Calendar.DAY_OF_MONTH)+"/" + (cal.get(Calendar.MONTH)+1)+"', " + cumLength + "],"; 
 			}
 		}
 		

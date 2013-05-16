@@ -83,55 +83,15 @@ public class RunListFragment extends ListFragment
 		
 		runObjects = new ArrayList<RunObject>();
 		
-		//get data from parse first!
-		String fullname = Contact.getCurrentUser();
-		ParseQuery query = new ParseQuery("GPSData");
-		query.whereEqualTo("owner", fullname);
-		query.include("gpsCoord.objectId");
-		query.findInBackground(new FindCallback() {
-
-			@Override
-			public void done(List<ParseObject> objects, ParseException e) {
-				if(e==null)
-				{
-					for(ParseObject p : objects)
-					{	//list of parseObjects
-						ArrayList<ArrayList<Float>> run = new ArrayList<ArrayList<Float>>();
-						for(Object gpsCoord : p.getList("gpsCoord"))
-						{
-							if(gpsCoord instanceof ParseObject)
-							{
-								//save data
-								ParseObject coordObject = (ParseObject) gpsCoord;
-								ArrayList<Float> coord = new ArrayList<Float>(); 
-								coord.add(coordObject.getNumber("lat").floatValue());
-								coord.add(coordObject.getNumber("ln").floatValue());
-								coord.add(coordObject.getNumber("acc").floatValue());
-								coord.add(coordObject.getNumber("time").floatValue());
-								run.add(coord);
-							}
-						}
-						
-						runObjects.add(new RunObject(gpsDataSort(run),p.getCreatedAt()));
-					}
-					//update runObjects in ProfileActivity
-					mCallbacks.setRunObjects(runObjects);
-				} else {
-					Log.d("Error retrieving GPS data for user " + Contact.getCurrentUser(), e.getMessage());
-				}
-			}
-
-		});
-
+		ProfileActivity pa = (ProfileActivity) getActivity();
+		if(pa!=null)
+		{
+			runObjects = pa.getRunObjects();
+		}
+		System.out.println(runObjects.size());
 		// apparently text1 does not matter
 		adapter = new RunListAdapter(getActivity(), android.R.id.text1, runObjects);
 		setListAdapter(adapter);
-	}
-	
-	private ArrayList<ArrayList<Float>> gpsDataSort(ArrayList<ArrayList<Float>> run) 
-	{
-		Collections.sort(run, new GPSCoordComparator());
-		return run;
 	}
 	
 	@Override

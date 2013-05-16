@@ -3,6 +3,7 @@ package dk.partyroulette.runforyourmoney;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -11,8 +12,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,9 +25,12 @@ import android.view.ViewConfiguration;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseAnalytics;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.PushService;
 
 import dk.partyroulette.runforyourmoney.R;
@@ -32,6 +38,7 @@ import dk.partyroulette.runforyourmoney.control.RetrievedObjectListener;
 import dk.partyroulette.runforyourmoney.datalayer.Challenge;
 import dk.partyroulette.runforyourmoney.datalayer.Contact;
 import dk.partyroulette.runforyourmoney.datalayer.Participant;
+import dk.partyroulette.runforyourmoney.datalayer.RunObject;
 
 /**
  * An activity representing a list of Challenges. This activity has different
@@ -50,8 +57,8 @@ import dk.partyroulette.runforyourmoney.datalayer.Participant;
  * selections.
  */
 public class ChallengeListActivity extends FragmentActivity implements
-		ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callbacks
-		{
+ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callbacks
+{
 
 	/**
 	 * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -59,13 +66,14 @@ public class ChallengeListActivity extends FragmentActivity implements
 	 */
 	private boolean mTwoPane;
 	private static ChallengeListFragment challengeListFragment;
+	private List<RunObject> runObjects = new ArrayList<RunObject>();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
-		
-		
+
+
+
 		// Set Parse parameters
 		Parse.initialize(this, "aAnnNfcUtvwSLy7XD2ImtnbLpwYko5Dp1FdCheuC","DDDbciaF9P4DcXXodmAJIfVn1M3bQTJ0CtS0Cc9t"); 
 		PushService.setDefaultPushCallback(this, ChallengeListActivity.class);
@@ -76,24 +84,24 @@ public class ChallengeListActivity extends FragmentActivity implements
 		}else{
 			System.out.println("NOT INSTALLED");
 			setContentView(R.layout.login);
-			
+
 		}
-		
+
 		Challenge.retrieveChallengesFromDBForUser(this, Contact.getCurrentUser());
-		
-		
+
+
 		// HACK til at vise menu-knap
 		try {
-	        ViewConfiguration config = ViewConfiguration.get(this);
-	        Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
-	        if(menuKeyField != null) {
-	            menuKeyField.setAccessible(true);
-	            menuKeyField.setBoolean(config, false);
-	        }
-	    } catch (Exception ex) {
-	        // Ignore
-	    }
-		
+			ViewConfiguration config = ViewConfiguration.get(this);
+			Field menuKeyField = ViewConfiguration.class.getDeclaredField("sHasPermanentMenuKey");
+			if(menuKeyField != null) {
+				menuKeyField.setAccessible(true);
+				menuKeyField.setBoolean(config, false);
+			}
+		} catch (Exception ex) {
+			// Ignore
+		}
+
 		getActionBar().setDisplayShowTitleEnabled(false);
 
 		if (findViewById(R.id.challenge_detail_container) != null) {
@@ -107,23 +115,63 @@ public class ChallengeListActivity extends FragmentActivity implements
 			// 'activated' state when touched.
 			challengeListFragment = ((ChallengeListFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.challenge_list));
-					
+
 			challengeListFragment.setActivateOnItemClick(true);
 		}
-		
+
 		//this.challengeListFragment = (ChallengeListFragment) getFragmentManager().findFragmentById(R.id.challenge_list);
 
 		// TODO: If exposing deep links into your app, handle intents here.
+
+		//get data from parse first!
+		String fullname = Contact.getCurrentUser();
+		ParseQuery query = new ParseQuery("GPSData");
+		query.whereEqualTo("owner", fullname);
+		query.include("gpsCoord.objectId");
+		query.findInBackground(new FindCallback() {
+
+			@Override
+			public void done(List<ParseObject> objects, ParseException e) {
+				if(e==null)
+				{
+					for(ParseObject p : objects)
+					{	//list of parseObjects
+						ArrayList<ArrayList<Float>> run = new ArrayList<ArrayList<Float>>();
+						for(Object gpsCoord : p.getList("gpsCoord"))
+						{
+							if(gpsCoord instanceof ParseObject)
+							{
+								//save data
+								ParseObject coordObject = (ParseObject) gpsCoord;
+								ArrayList<Float> coord = new ArrayList<Float>(); 
+								coord.add(coordObject.getNumber("lat").floatValue());
+								coord.add(coordObject.getNumber("ln").floatValue());
+								coord.add(coordObject.getNumber("acc").floatValue());
+								coord.add(coordObject.getNumber("time").floatValue());
+								run.add(coord);
+							}
+						}
+
+						runObjects.add(new RunObject(gpsDataSort(run),p.getCreatedAt()));
+					}
+					//update runObjects
+					Collections.sort(runObjects, new RunObjectComparator());
+				} else {
+					Log.d("Error retrieving GPS data for user " + Contact.getCurrentUser(), e.getMessage());
+				}
+			}
+
+		});
 	}
-	
-	    @Override
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	            //inflate with your particular xml
-	    	MenuInflater inflater = getMenuInflater();
-	        inflater.inflate(R.menu.menu, menu);
-	        return super.onCreateOptionsMenu(menu);
+		//inflate with your particular xml
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.menu, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) 
 	{
@@ -140,9 +188,21 @@ public class ChallengeListActivity extends FragmentActivity implements
 						AddChallengeActivity.class);
 				startActivity(detailIntent);
 				break;
+			case R.id.item2:
+				if(runObjects!=null && runObjects.size()!=0)
+				{
+					Intent intent = new Intent(this, StatsActivity.class);
+					intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
+					startActivity(intent);
+				}
+				break;
 			case R.id.item3:
-				Intent intent = new Intent(this, ProfileActivity.class);
-				startActivity(intent);
+				if(runObjects!=null && runObjects.size()!=0)
+				{
+					Intent intent = new Intent(this, ProfileActivity.class);
+					intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
+					startActivity(intent);
+				}
 				break;
 			}			
 		}
@@ -164,8 +224,8 @@ public class ChallengeListActivity extends FragmentActivity implements
 			ChallengeDetailFragment fragment = new ChallengeDetailFragment();
 			fragment.setArguments(arguments);
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.challenge_detail_container, fragment)
-					.commit();
+			.replace(R.id.challenge_detail_container, fragment)
+			.commit();
 
 		} else {
 			// In single-pane mode, simply start the detail activity
@@ -176,49 +236,49 @@ public class ChallengeListActivity extends FragmentActivity implements
 			startActivity(detailIntent);
 		}
 	}
-	
+
 	/**
 	 * Register the user of the app. This method should only be called first time app opens.
 	 * @param view
 	 */
 	public void registerUser(View view){
 		EditText firstNameText = (EditText) findViewById(R.id.firstNameText);
-	    EditText lastNameText = (EditText) findViewById(R.id.lastNameText);
-	    System.out.println("firstname: "+firstNameText.getText().toString());
-	    if(firstNameText.getText().toString().equals("") || lastNameText.getText().toString().equals("")){
-	    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+		EditText lastNameText = (EditText) findViewById(R.id.lastNameText);
+		System.out.println("firstname: "+firstNameText.getText().toString());
+		if(firstNameText.getText().toString().equals("") || lastNameText.getText().toString().equals("")){
+			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 					this);
-	 
-				// set title
-				alertDialogBuilder.setTitle("Enter Credentials");
-	 
-				// set dialog message
-				alertDialogBuilder
-					.setMessage("Please enter first and last name.")
-					.setCancelable(false)
-					.setPositiveButton("OK",new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog,int id) {
-							// if this button is clicked, close
-							// current activity
-						}
-					  });
-	 
-					// create alert dialog
-					AlertDialog alertDialog = alertDialogBuilder.create();
-	 
-					// show it
-					alertDialog.show();
-				
+
+			// set title
+			alertDialogBuilder.setTitle("Enter Credentials");
+
+			// set dialog message
+			alertDialogBuilder
+			.setMessage("Please enter first and last name.")
+			.setCancelable(false)
+			.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog,int id) {
+					// if this button is clicked, close
+					// current activity
+				}
+			});
+
+			// create alert dialog
+			AlertDialog alertDialog = alertDialogBuilder.create();
+
+			// show it
+			alertDialog.show();
+
 			return;
 		}
-	    
+
 		Contact.addContactToDB(new Contact(firstNameText.getText().toString(),lastNameText.getText().toString()));
 		//add name to shared preferences
 		SharedPreferences settings = getApplicationContext().getSharedPreferences("runforyourmoney", 0);
 		SharedPreferences.Editor editor = settings.edit();
 		editor.putString("name", firstNameText.getText().toString() + " " + lastNameText.getText().toString());
 		editor.commit();
-		
+
 		setContentView(R.layout.activity_challenge_list);
 		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
 		imm.hideSoftInputFromWindow(lastNameText.getWindowToken(), 0);
@@ -228,15 +288,15 @@ public class ChallengeListActivity extends FragmentActivity implements
 	@Override
 	public void onRetrievedContactObject(List<Contact> contacts) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onRetrievedChallengeObjects(List<Challenge> challenges) {
 		System.out.println("RETRIEVED CHALLENGES"+Integer.toString(challenges.size()));
 		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");  
-		
-		
+
+
 		for(Challenge c: challenges){
 			for(Participant p: c.getParticipants()){
 				if(p.getName().equals(Contact.getCurrentUser()) && !p.getAccepted()){
@@ -244,56 +304,65 @@ public class ChallengeListActivity extends FragmentActivity implements
 				}
 			}
 		}
-		
-		
+
+
 	}
-	
+
 	private void showAcceptChallengeAlert(String msg, final String identifier){
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
 				this);
- 
-			// set title
-			alertDialogBuilder.setTitle("Accept Challenge?");
- 
-			// set dialog message
-			alertDialogBuilder
-				.setMessage(msg)
-				.setCancelable(false)
-				.setNegativeButton("Decline",new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
-						// if this button is clicked, close
-						// current activity
-						Challenge.declineChallenge(identifier);
-					}
-				  })
 
-				.setPositiveButton("Accept",new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog,int id) {
-						// if this button is clicked, close
-						// current activity
-						Challenge.acceptChallenge(identifier);
-					}
-				  });
- 
-				// create alert dialog
-				AlertDialog alertDialog = alertDialogBuilder.create();
- 
-				// show it
-				alertDialog.show();
+		// set title
+		alertDialogBuilder.setTitle("Accept Challenge?");
+
+		// set dialog message
+		alertDialogBuilder
+		.setMessage(msg)
+		.setCancelable(false)
+		.setNegativeButton("Decline",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				// if this button is clicked, close
+				// current activity
+				Challenge.declineChallenge(identifier);
+			}
+		})
+
+		.setPositiveButton("Accept",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				// if this button is clicked, close
+				// current activity
+				Challenge.acceptChallenge(identifier);
+			}
+		});
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
 
 	}
 
 	@Override
 	public void onRetrievedObject(List<ParseObject> obj) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onProfileSelected() 
 	{
-		Intent intent = new Intent(this, ProfileActivity.class);
-		startActivity(intent);
+		if(runObjects!=null && runObjects.size()!=0)
+		{
+			Intent intent = new Intent(this, ProfileActivity.class);
+			intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
+			startActivity(intent);
+		}
 	}
 
+	private ArrayList<ArrayList<Float>> gpsDataSort(ArrayList<ArrayList<Float>> run) 
+	{
+		Collections.sort(run, new GPSCoordComparator());
+		return run;
+	}
 }
