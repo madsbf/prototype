@@ -40,6 +40,8 @@ public class ChallengeDetailFragment extends Fragment
 	 */
 	private Challenge mItem;
 
+	private ChallengeView challengeView = null;
+
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
 	 * fragment (e.g. upon screen orientation changes).
@@ -69,11 +71,31 @@ public class ChallengeDetailFragment extends Fragment
 		// Show the dummy content as text in a TextView.
 		if (mItem != null) 
 		{
-			ChallengeView challengeView = new ChallengeView(mItem, getActivity());
+			challengeView = new ChallengeView(mItem, getActivity());
 			challengeView.createDetailView(rootView);
 		}
 
 		return rootView;
+	}
+
+	@Override
+	public void onPause()
+	{
+		//end run
+		if(challengeView != null)
+		{
+			challengeView.end();
+		}
+	}
+	
+	@Override
+	public void onStop()
+	{
+		//end run
+		if(challengeView != null)
+		{
+			challengeView.end();
+		}
 	}
 
 
