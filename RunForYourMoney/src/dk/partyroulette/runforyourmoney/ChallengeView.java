@@ -190,6 +190,8 @@ public class ChallengeView implements OnClickListener
 			}
 		}
 
+		/* Removed from prototype - No profile images
+
 		ImageView[] imageViews = new ImageView[challenge.getParticipants().length];
 		for(int i = 0; i < challenge.getParticipants().length; i++)
 		{
@@ -200,6 +202,7 @@ public class ChallengeView implements OnClickListener
 		}
 
 		new ImageLoader(imageViews).execute(challenge.getParticipants());
+		 */
 	}
 
 	private class ImageLoader extends AsyncTask<Participant, Void, Bitmap[]>
@@ -407,34 +410,41 @@ public class ChallengeView implements OnClickListener
 
 	public void end() {
 		//stop receiving updates
-		locationManager.removeUpdates(locationListener);
-		//prepare dataobject
-		RunObject ro = new RunObject(gpsData);
-		//RunObject ro = new RunObject(createFakeData()); DEBUG
-		//get name
-		String fullname = Contact.getCurrentUser();
-		
-		if(ro.getLength()!=0.0)
+		if(challenge instanceof ExerciseChallenge)
 		{
-			//TODO: add challenge id to name
-			ParseObject gpsData = new ParseObject("GPSData");
-			for(ArrayList<Float> gpsCoord : ro.getGpsData())
+			if(locationManager != null)
 			{
-				ParseObject gpsObject = new ParseObject("GPS_" + fullname.replace(" ", ""));
-				gpsObject.put("lat",gpsCoord.get(0));
-				gpsObject.put("ln", gpsCoord.get(1));
-				gpsObject.put("acc", gpsCoord.get(2));
-				gpsObject.put("time", gpsCoord.get(3));
-				gpsData.add("gpsCoord", gpsObject);
-				//TODO: add challenge id to GPS data
+				locationManager.removeUpdates(locationListener);
+				//prepare dataobject
+				RunObject ro = new RunObject(gpsData);
+				//RunObject ro = new RunObject(createFakeData()); DEBUG
+				//get name
+				String fullname = Contact.getCurrentUser();
+				
+				if(ro.getLength()!=0.0)
+				{
+					//TODO: add challenge id to name
+					ParseObject gpsData = new ParseObject("GPSData");
+					for(ArrayList<Float> gpsCoord : ro.getGpsData())
+					{
+						ParseObject gpsObject = new ParseObject("GPS_" + fullname.replace(" ", ""));
+						gpsObject.put("lat",gpsCoord.get(0));
+						gpsObject.put("ln", gpsCoord.get(1));
+						gpsObject.put("acc", gpsCoord.get(2));
+						gpsObject.put("time", gpsCoord.get(3));
+						gpsData.add("gpsCoord", gpsObject);
+						//TODO: add challenge id to GPS data
+					}
+					gpsData.put("owner", fullname);
+					gpsData.saveInBackground();
+				}
 			}
-			gpsData.put("owner", fullname);
-			gpsData.saveInBackground();
+			
+			stopButton.setVisibility(View.INVISIBLE);
+			startButton.setText("Go!");
+			paused = true;
+			runStarted = false;
 		}
-		stopButton.setVisibility(View.INVISIBLE);
-		startButton.setText("Go!");
-		paused = true;
-		runStarted = false;
 	}
 
 

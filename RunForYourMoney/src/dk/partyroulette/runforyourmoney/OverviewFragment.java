@@ -57,7 +57,9 @@ public class OverviewFragment extends Fragment implements OnClickListener
 		
 		textCoins.setText("Coins: " + DummyContent.PROFILE.getCoins());
 
-		new ImageLoader(imageProfile).execute();
+		/* Removed from prototype - No Profile images
+		 * new ImageLoader(imageProfile).execute();
+		 */
 
 		return rootView;
 	}

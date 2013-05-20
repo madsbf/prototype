@@ -25,13 +25,8 @@ public class DummyContent {
 	 */
 	public static Map<Long, Challenge> ITEM_MAP = new HashMap<Long, Challenge>();
 
-	static {
-		// Add 2 sample items.	
-		Participant[] participants1 = { 
-				new Participant("Mads", "http://graph.facebook.com/madsbf/picture?type=normal", new RunObject(getFakeGpsData())),
-				new Participant("Du", "http://graph.facebook.com/dunguyen90/picture?type=normal", new IntProgress(3)), 
-				new Participant("Noel", "http://graph.facebook.com/noelvang/picture?type=normal", new IntProgress(0)), 
-				new Participant("Helge", "http://graph.facebook.com/helgemunkjacobsen/picture?type=normal", new IntProgress(5))};
+	private static void load()
+	{
 		Participant[] participants2 = {
 				new Participant("Mads", "http://graph.facebook.com/madsbf/picture?type=normal", new IntProgress(6))};
 		Participant[] participants3 = {
@@ -39,19 +34,22 @@ public class DummyContent {
 				new Participant("Du", "http://graph.facebook.com/dunguyen90/picture?type=normal", new IntProgress(6)),  
 				new Participant("Noel", "http://graph.facebook.com/noelvang/picture?type=normal", new IntProgress(13)), 
 				new Participant("Helge", "http://graph.facebook.com/helgemunkjacobsen/picture?type=normal", new IntProgress(11))};
-		Participant[] participants4 = {
-				new Participant("Mads", "http://graph.facebook.com/madsbf/picture?type=normal", new IntProgress(10))};
 
-		addItem(new ExerciseChallenge(1l, "5km run", "Run 5km before the 23rd of april.", new Repetition(5), participants1, true));
-		addItem(new HealthChallenge(2l, "Stop smoking", "Stop smoking", new Repetition(12), participants2, true));
-		addItem(new LearningChallenge(3l, "Get to class on time", "Get to class on time.", new Repetition(13), participants3, true));
-		addItem(new ExerciseChallenge(4l, "20km run", "Run 20km bla bla bla.", new Repetition(20), participants4, false));
+		addItem(new HealthChallenge(1l, "Stop smoking", "Stop smoking", new Repetition(12), participants2, true));
+		addItem(new LearningChallenge(2l, "Get to class on time", "Get to class on time.", new Repetition(13), participants3, true));
+	}
+	
+	public static void reload()
+	{
+		ITEMS.clear();
+		ITEM_MAP.clear();
+		load();
 	}
 
 	public static Profile PROFILE = new Profile("Mads", "http://graph.facebook.com/madsbf/picture?type=normal", 100);
 
 	public static void addItem(Challenge item) {
-		ITEMS.add(item);
+		ITEMS.add(0, item);
 		ITEM_MAP.put(item.getId(), item);
 	}
 

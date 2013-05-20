@@ -42,7 +42,6 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 {
 	
 	private ChallengeListAdapter adapter;
-	public List<Challenge> ITEMS;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -98,14 +97,9 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 		adapter = new ChallengeListAdapter(getActivity(),
 				android.R.id.text1, DummyContent.ITEMS);
 		setListAdapter(adapter);
-		
-		
-
 	}
 	
-	
-	
-	
+
 	@Override
 	  public void onResume() 
 	{
@@ -205,8 +199,8 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 		System.out.println("LENGTH OF CHALLENGES: "+challenges.size());
 		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");  
 
-		ITEMS = new ArrayList<Challenge>();
-
+		DummyContent.reload();
+		
 		for(Challenge c: challenges){
 			for(Participant p: c.getParticipants()){
 				if(p.getName().equals(Contact.getCurrentUser())){
@@ -242,16 +236,15 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 				
 			}
 			
-			ExerciseChallenge exerciseChallenge = new ExerciseChallenge(1l, c.getName(), c.getDescription(), new Repetition(c.getLength()), c.getParticipants(), true);
-			ITEMS.add(exerciseChallenge);
+			ExerciseChallenge exerciseChallenge = new ExerciseChallenge(DummyContent.ITEMS.size() + 1, c.getName(), c.getDescription(), new Repetition(c.getLength()), c.getParticipants(), true);
+			DummyContent.addItem(exerciseChallenge);
 		}
 		
-		
-		for(Challenge c: ITEMS){
+		for(Challenge c: DummyContent.ITEMS){
 			System.out.println(c.getName());
 
 		}
-		adapter = new ChallengeListAdapter(getActivity(), android.R.id.text1, ITEMS);
+		adapter = new ChallengeListAdapter(getActivity(), android.R.id.text1, DummyContent.ITEMS);
 		setListAdapter(adapter);
 		/*
 		Participant[] participants1 = { 

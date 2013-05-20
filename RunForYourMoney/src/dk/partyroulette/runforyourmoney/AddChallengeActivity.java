@@ -87,7 +87,7 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 	public void onClick(View arg0) 
 	{
 		ChallengeListFragment clf = (ChallengeListFragment) ChallengeListActivity.challengeListActivity.getSupportFragmentManager().findFragmentById(R.id.challenge_list);
-		challenges = clf.ITEMS;
+		challenges = DummyContent.ITEMS;
 		for(Challenge c: challenges){
 			if(c.getName().equals(editName.getText().toString())){
 				showAlert("Please write another challenge name. Name taken.");

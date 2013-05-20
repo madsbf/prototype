@@ -81,6 +81,7 @@ public class ChallengeDetailFragment extends Fragment
 	@Override
 	public void onPause()
 	{
+		super.onPause();
 		//end run
 		if(challengeView != null)
 		{
@@ -91,6 +92,7 @@ public class ChallengeDetailFragment extends Fragment
 	@Override
 	public void onStop()
 	{
+		super.onStop();
 		//end run
 		if(challengeView != null)
 		{
