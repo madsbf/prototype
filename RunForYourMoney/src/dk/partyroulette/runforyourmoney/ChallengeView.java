@@ -420,7 +420,7 @@ public class ChallengeView implements OnClickListener
 			ParseObject gpsData = new ParseObject("GPSData");
 			for(ArrayList<Float> gpsCoord : ro.getGpsData())
 			{
-				ParseObject gpsObject = new ParseObject("GPS_" + fullname);
+				ParseObject gpsObject = new ParseObject("GPS_" + fullname.replace(" ", ""));
 				gpsObject.put("lat",gpsCoord.get(0));
 				gpsObject.put("ln", gpsCoord.get(1));
 				gpsObject.put("acc", gpsCoord.get(2));

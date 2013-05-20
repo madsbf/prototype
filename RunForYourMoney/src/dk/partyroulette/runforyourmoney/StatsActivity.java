@@ -119,7 +119,10 @@ public class StatsActivity extends FragmentActivity
 		}
 		visualization += "var chart = new google.visualization.LineChart(document.getElementById('chart_div'));chart.draw(data, options);}</script></head><body><div id=\"chart_div\" style=\"width: 380px; height: 380px;\"></div></body></html>";
 		
-		
+		if(runObjects.size()==0)
+		{
+			visualization = "<html><body><p>No data. Go out and run!</p></body></html>";
+		}
 		return visualization;
 	}
 

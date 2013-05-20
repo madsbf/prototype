@@ -155,6 +155,7 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 						runObjects.add(new RunObject(gpsDataSort(run),p.getCreatedAt()));
 					}
 					//update runObjects
+					System.out.println("Got runobjects");
 					Collections.sort(runObjects, new RunObjectComparator());
 				} else {
 					Log.d("Error retrieving GPS data for user " + Contact.getCurrentUser(), e.getMessage());
@@ -189,7 +190,7 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 				startActivity(detailIntent);
 				break;
 			case R.id.item2:
-				if(runObjects!=null && runObjects.size()!=0)
+				if(runObjects!=null)
 				{
 					Intent intent = new Intent(this, StatsActivity.class);
 					intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
@@ -197,7 +198,7 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 				}
 				break;
 			case R.id.item3:
-				if(runObjects!=null && runObjects.size()!=0)
+				if(runObjects!=null)
 				{
 					Intent intent = new Intent(this, ProfileActivity.class);
 					intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
@@ -352,7 +353,7 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 	@Override
 	public void onProfileSelected() 
 	{
-		if(runObjects!=null && runObjects.size()!=0)
+		if(runObjects!=null)
 		{
 			Intent intent = new Intent(this, ProfileActivity.class);
 			intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
