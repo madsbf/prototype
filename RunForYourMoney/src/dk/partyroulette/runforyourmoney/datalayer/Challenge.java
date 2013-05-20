@@ -108,6 +108,7 @@ public class Challenge{
 	 * Add challenge to DB
 	 * @param Challenge
 	 */
+	@SuppressWarnings("deprecation")
 	public static void addChallengeToDB(Challenge c){
 		System.out.println("Saving challenge");
 		ParseObject challenge = new ParseObject("challenge");
@@ -128,7 +129,7 @@ public class Challenge{
 		challenge.put("progress",Arrays.asList(participantProgress));
 		challenge.put("imageurl", Arrays.asList(participantImageUrl));
 		challenge.put("accepted", Arrays.asList(participantAccepted));
-		challenge.put("deadline", c.getDeadline().toString());
+		challenge.put("deadline", c.getDeadline().toGMTString());
 		challenge.put("typename", c.getTypeName());
 		challenge.put("description", c.getDescription());
 		challenge.put("name", c.getName());

@@ -91,7 +91,7 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		}
 		
 		// Set date object
-		SimpleDateFormat deadline = new SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH);
+		SimpleDateFormat deadline = new SimpleDateFormat("dd-MM-yyyy");
 		Date date = new Date();
 		deadline.setLenient(false);
 		Date d = null;
