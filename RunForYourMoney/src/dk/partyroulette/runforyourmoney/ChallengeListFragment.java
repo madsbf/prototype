@@ -1,11 +1,16 @@
 package dk.partyroulette.runforyourmoney;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import com.parse.ParseObject;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.View;
@@ -37,6 +42,7 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 {
 	
 	private ChallengeListAdapter adapter;
+	public List<Challenge> ITEMS;
 
 	/**
 	 * The serialization (saved instance state) Bundle key representing the
@@ -197,19 +203,54 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 	@Override
 	public void onRetrievedChallengeObjects(List<Challenge> challenges) {
 		System.out.println("LENGTH OF CHALLENGES: "+challenges.size());
-		
-		List<Challenge> ITEMS = new ArrayList<Challenge>();
+		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");  
+
+		ITEMS = new ArrayList<Challenge>();
 
 		for(Challenge c: challenges){
-			System.out.println("BLABLABLA");
-			System.out.println(c.getName());
-			System.out.println(c.getDescription());
-			
+			for(Participant p: c.getParticipants()){
+				if(p.getName().equals(Contact.getCurrentUser())){
+					
+					
+					for(Participant par: c.getParticipants()){
+						if(par.getProgress().getInteger() >= c.getLength()){
+							if(par.getName().equals(Contact.getCurrentUser())){
+								showMessageDialog("Congratulations", "You are the winner of challenge "+c.getName()+".");
+							}else{
+								showMessageDialog("Lost", "You are the loser of challenge "+c.getName()+".");
+							}
+							
+							Challenge.declineChallenge(c.getIdentifier());
+							
+						}
+					}
+					
+					Date today = Calendar.getInstance().getTime();
+					
+					if(c.getDeadline().compareTo(today)<0){
+						showMessageDialog("Outdated Challenge", "Challenge "+c.getName()+" is outdated with no winner and will be deleted from your challenges.");
+						Challenge.declineChallenge(c.getIdentifier());
+						return;
+					}
+						
+					
+
+					if(!p.getAccepted()){
+						showAcceptChallengeAlert(c.getChallengeOwner()+" has challenged you to run "+c.getLength()+" km. before "+df.format(c.getDeadline())+".",c.getIdentifier());
+					}
+				}
+				
+			}
 			
 			ExerciseChallenge exerciseChallenge = new ExerciseChallenge(1l, c.getName(), c.getDescription(), new Repetition(c.getLength()), c.getParticipants(), true);
 			ITEMS.add(exerciseChallenge);
 		}
 		
+		
+		for(Challenge c: ITEMS){
+			System.out.println(c.getName());
+
+		}
 		adapter = new ChallengeListAdapter(getActivity(), android.R.id.text1, ITEMS);
 		setListAdapter(adapter);
 		/*
@@ -231,5 +272,73 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 	public void onRetrievedObject(List<ParseObject> obj) {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	
+	
+	private void showMessageDialog(String title,String msg){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+
+		// set title
+		alertDialogBuilder.setTitle(title);
+
+		// set dialog message
+		alertDialogBuilder
+		.setMessage(msg)
+		.setCancelable(false)
+
+		.setPositiveButton("OK",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				// if this button is clicked, close
+				// current activity
+				retrieveChallengeObjects();
+
+			}
+		});
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+
+		
+	}
+
+	private void showAcceptChallengeAlert(String msg, final String identifier){
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
+				getActivity());
+
+		// set title
+		alertDialogBuilder.setTitle("Accept Challenge?");
+
+		// set dialog message
+		alertDialogBuilder
+		.setMessage(msg)
+		.setCancelable(false)
+		.setNegativeButton("Decline",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				// if this button is clicked, close
+				// current activity
+				Challenge.declineChallenge(identifier);
+			}
+		})
+
+		.setPositiveButton("Accept",new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog,int id) {
+				// if this button is clicked, close
+				// current activity
+				Challenge.acceptChallenge(identifier);
+				retrieveChallengeObjects();
+
+			}
+		});
+
+		// create alert dialog
+		AlertDialog alertDialog = alertDialogBuilder.create();
+
+		// show it
+		alertDialog.show();
+
 	}
 }

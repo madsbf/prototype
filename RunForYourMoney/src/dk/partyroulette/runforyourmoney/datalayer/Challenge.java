@@ -281,12 +281,18 @@ public class Challenge{
 		});
 	}
 	
+
+	
+	public static void deleteChallenge(final String challengeName){
+		
+	}
+	
 	/**
 	 * Update challenge for a challenge name.
 	 * @param challengeName
 	 * @param progress
 	 */
-	public static void updateChallengeProgress(final String challengeName, int progress){
+	public static void updateChallengeProgress(final String challengeName, final int progress){
 		ParseQuery query = new ParseQuery("challenge");
 		 query.findInBackground(new FindCallback() {
 		     public void done(List<ParseObject> objects, ParseException e) {
@@ -298,8 +304,7 @@ public class Challenge{
 		 						if(par.get(i).equals(Contact.getCurrentUser())){
 
 		 							List<String> tmpProgress = o.getList("progress");
-		 							tmpProgress.remove(i);
-		 							
+		 							tmpProgress.set(i, Integer.toString(progress));
 		 							o.put("progress",tmpProgress);
 		 							
 		 							o.saveInBackground();			

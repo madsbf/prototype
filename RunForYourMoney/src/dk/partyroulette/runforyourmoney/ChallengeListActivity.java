@@ -3,7 +3,9 @@ package dk.partyroulette.runforyourmoney;
 import java.lang.reflect.Field;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -57,7 +59,7 @@ import dk.partyroulette.runforyourmoney.datalayer.RunObject;
  * selections.
  */
 public class ChallengeListActivity extends FragmentActivity implements
-ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callbacks
+ChallengeListFragment.Callbacks, OverviewFragment.Callbacks
 {
 
 	/**
@@ -67,7 +69,7 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 	private boolean mTwoPane;
 	private static ChallengeListFragment challengeListFragment;
 	private List<RunObject> runObjects = new ArrayList<RunObject>();
-
+	public static ChallengeListActivity challengeListActivity;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -81,14 +83,12 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 		if(Contact.checkForInstallation()){
 			System.out.println("INSTALLED");
 			setContentView(R.layout.activity_challenge_list);
+			challengeListActivity = this;
 		}else{
 			System.out.println("NOT INSTALLED");
 			setContentView(R.layout.login);
 
 		}
-
-		Challenge.retrieveChallengesFromDBForUser(this, Contact.getCurrentUser());
-
 
 		// HACK til at vise menu-knap
 		try {
@@ -286,77 +286,7 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 		imm.hideSoftInputFromWindow(firstNameText.getWindowToken(), 0);
 	}
 
-	@Override
-	public void onRetrievedContactObject(List<Contact> contacts) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onRetrievedChallengeObjects(List<Challenge> challenges) {
-		System.out.println("RETRIEVED CHALLENGES"+Integer.toString(challenges.size()));
-		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");  
-
-
-		for(Challenge c: challenges){
-			for(Participant p: c.getParticipants()){
-				if(p.getName().equals(Contact.getCurrentUser())){
-					
-					//if(c.getDeadline())
-					
-					if(!p.getAccepted()){
-						showAcceptChallengeAlert(c.getChallengeOwner()+" has challenged you to run "+c.getLength()+" km. before "+df.format(c.getDeadline())+".",c.getIdentifier());
-					}
-				}
-				
-			}
-		}
-		
-	}
-
-	private void showAcceptChallengeAlert(String msg, final String identifier){
-		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(
-				this);
-
-		// set title
-		alertDialogBuilder.setTitle("Accept Challenge?");
-
-		// set dialog message
-		alertDialogBuilder
-		.setMessage(msg)
-		.setCancelable(false)
-		.setNegativeButton("Decline",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int id) {
-				// if this button is clicked, close
-				// current activity
-				Challenge.declineChallenge(identifier);
-			}
-		})
-
-		.setPositiveButton("Accept",new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog,int id) {
-				// if this button is clicked, close
-				// current activity
-				Challenge.acceptChallenge(identifier);
-				((ChallengeListFragment) getSupportFragmentManager().findFragmentById(R.id.challenge_list)).retrieveChallengeObjects();
-
-			}
-		});
-
-		// create alert dialog
-		AlertDialog alertDialog = alertDialogBuilder.create();
-
-		// show it
-		alertDialog.show();
-
-	}
-
-	@Override
-	public void onRetrievedObject(List<ParseObject> obj) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public void onProfileSelected() 
 	{

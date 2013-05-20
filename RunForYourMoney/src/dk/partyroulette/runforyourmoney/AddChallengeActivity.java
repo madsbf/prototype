@@ -17,6 +17,7 @@ import com.parse.ParseObject;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ClipData.Item;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.format.DateUtils;
@@ -41,7 +42,8 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 	private ImageButton buttonRemove;
 	
 	private List<String> friendsAdded;
-	
+	List<Challenge> challenges = new ArrayList<Challenge>();
+
 	
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -84,6 +86,15 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 	@Override
 	public void onClick(View arg0) 
 	{
+		ChallengeListFragment clf = (ChallengeListFragment) ChallengeListActivity.challengeListActivity.getSupportFragmentManager().findFragmentById(R.id.challenge_list);
+		challenges = clf.ITEMS;
+		for(Challenge c: challenges){
+			if(c.getName().equals(editName.getText().toString())){
+				showAlert("Please write another challenge name. Name taken.");
+				return;
+			}
+		}
+		
 		// If any of the fields are not filled out an alert shall show.
 		if(editName.getText().toString() == "" || editLength.getText().toString() == "" || editDeadline.getText().toString() == "" || editCoins.getText().toString() == "" || friendsAdded.size() == 0){
 			showAlert("Please fill out all information.");

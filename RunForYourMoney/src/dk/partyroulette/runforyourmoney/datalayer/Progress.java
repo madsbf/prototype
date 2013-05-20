@@ -14,5 +14,8 @@ public abstract class Progress
 		int percentage = Math.round((((float) getProgressInt() / max) * 100));
 		return percentage;
 	}
+	public int getInteger(){
+		return getProgressInt();
+	}
 
 }
