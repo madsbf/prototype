@@ -224,7 +224,7 @@ public class Challenge{
 		    if (e == null) {
 					List<String> par = object.getList("participants");
 					for(int i = 0; i<par.size();i++){
-						if(par.get(i).replace(" ", "").equals(Contact.getCurrentUser())){
+						if(par.get(i).equals(Contact.getCurrentUser())){
 							List<String> acc = object.getList("accepted");
 							acc.set(i, "true");
 							object.put("accepted",acc);
