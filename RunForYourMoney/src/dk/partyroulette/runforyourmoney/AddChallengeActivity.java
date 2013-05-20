@@ -123,6 +123,7 @@ public class AddChallengeActivity extends Activity implements OnClickListener, R
 		for(String n: friendsAdded){
 			Contact.sendNotification("You have been invited to challenge: "+editName.getText().toString(), n);
 		}
+		Contact.sendNotification("You are the owner of challenge: "+editName.getText().toString(), Contact.getCurrentUser());
 		
 		this.finish();
 	}

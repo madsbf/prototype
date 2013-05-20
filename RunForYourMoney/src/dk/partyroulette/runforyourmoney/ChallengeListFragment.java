@@ -94,7 +94,6 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 		setListAdapter(adapter);
 		
 		
-		Challenge.retrieveChallengesFromDBForUser(this, Contact.getCurrentUser());
 
 	}
 	
@@ -105,6 +104,7 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 	  public void onResume() 
 	{
 	     super.onResume();
+   		 Challenge.retrieveChallengesFromDBForUser(this, Contact.getCurrentUser());
 	     adapter.notifyDataSetChanged();
 	  }
 
