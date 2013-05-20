@@ -300,13 +300,18 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 
 		for(Challenge c: challenges){
 			for(Participant p: c.getParticipants()){
-				if(p.getName().equals(Contact.getCurrentUser()) && !p.getAccepted()){
-					showAcceptChallengeAlert(c.getChallengeOwner()+" has challenged you to run "+c.getLength()+" km. before "+df.format(c.getDeadline())+".",c.getIdentifier());
+				if(p.getName().equals(Contact.getCurrentUser())){
+					
+					//if(c.getDeadline())
+					
+					if(!p.getAccepted()){
+						showAcceptChallengeAlert(c.getChallengeOwner()+" has challenged you to run "+c.getLength()+" km. before "+df.format(c.getDeadline())+".",c.getIdentifier());
+					}
 				}
+				
 			}
 		}
-
-
+		
 	}
 
 	private void showAcceptChallengeAlert(String msg, final String identifier){
@@ -333,6 +338,8 @@ ChallengeListFragment.Callbacks, RetrievedObjectListener, OverviewFragment.Callb
 				// if this button is clicked, close
 				// current activity
 				Challenge.acceptChallenge(identifier);
+				((ChallengeListFragment) getSupportFragmentManager().findFragmentById(R.id.challenge_list)).retrieveChallengeObjects();
+
 			}
 		});
 

@@ -229,6 +229,7 @@ public class Challenge{
 							List<String> acc = object.getList("accepted");
 							acc.set(i, "true");
 							object.put("accepted",acc);
+							
 							object.saveInBackground();			
 					}
 					}
@@ -279,7 +280,39 @@ public class Challenge{
 		  }
 		});
 	}
+	
+	/**
+	 * Update challenge for a challenge name.
+	 * @param challengeName
+	 * @param progress
+	 */
+	public static void updateChallengeProgress(final String challengeName, int progress){
+		ParseQuery query = new ParseQuery("challenge");
+		 query.findInBackground(new FindCallback() {
+		     public void done(List<ParseObject> objects, ParseException e) {
+		         if (e == null) {
+		        	 for(ParseObject o: objects){
+		        		 if (o.getString("name").equals(challengeName)){
+		        			List<String> par = o.getList("participants");
+		 					for(int i = 0; i<par.size();i++){
+		 						if(par.get(i).equals(Contact.getCurrentUser())){
 
+		 							List<String> tmpProgress = o.getList("progress");
+		 							tmpProgress.remove(i);
+		 							
+		 							o.put("progress",tmpProgress);
+		 							
+		 							o.saveInBackground();			
+		 					}
+		 					}
+		        		 }
+		        	 }
+		         } else {
+		             System.out.println("Couldn't retrieve challenges. Error: "+e.toString());
+		         }
+		     }
+		 });
+	}
 
 
 

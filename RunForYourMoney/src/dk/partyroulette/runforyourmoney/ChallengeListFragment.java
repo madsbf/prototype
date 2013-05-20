@@ -190,6 +190,10 @@ public class ChallengeListFragment extends ListFragment implements RetrievedObje
 		
 	}
 
+	public void retrieveChallengeObjects(){
+  		 Challenge.retrieveChallengesFromDBForUser(this, Contact.getCurrentUser());
+
+	}
 	@Override
 	public void onRetrievedChallengeObjects(List<Challenge> challenges) {
 		System.out.println("LENGTH OF CHALLENGES: "+challenges.size());
