@@ -255,9 +255,11 @@ public class Challenge{
 
 							List<String> acc = object.getList("accepted");
 							acc.remove(i);
+							List<String> tmp = object.getList("participants");
+							tmp.remove(i);
 
 							object.put("accepted",Arrays.asList(acc));
-							object.put("participants",Arrays.asList(object.getList("participants").remove(i)));
+							object.put("participants",Arrays.asList(tmp));
 							object.put("progress",Arrays.asList(object.getList("progress").remove(i)));
 							object.put("imageurl",Arrays.asList(object.getList("imageurl").remove(i)));
 							object.saveInBackground();			
