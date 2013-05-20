@@ -83,12 +83,12 @@ ChallengeListFragment.Callbacks, OverviewFragment.Callbacks
 		if(Contact.checkForInstallation()){
 			System.out.println("INSTALLED");
 			setContentView(R.layout.activity_challenge_list);
-			challengeListActivity = this;
 		}else{
 			System.out.println("NOT INSTALLED");
 			setContentView(R.layout.login);
 
 		}
+		challengeListActivity = this;
 
 		// HACK til at vise menu-knap
 		try {
