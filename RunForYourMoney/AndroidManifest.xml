@@ -73,7 +73,7 @@
         
         <meta-data
     android:name="com.google.android.maps.v2.API_KEY"
-    android:value="AIzaSyAeZBjefGpCZbq4teElEp6gqFH_qZWGqy0"/>
+    android:value="AIzaSyA54mIUckXGoEr68rI0x9jdUXGD_VDG8_E"/>
         <service android:name="com.parse.PushService" />
 		<receiver android:name="com.parse.ParseBroadcastReceiver">
 		  <intent-filter>

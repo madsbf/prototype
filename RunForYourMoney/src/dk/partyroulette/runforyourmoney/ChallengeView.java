@@ -187,6 +187,11 @@ public class ChallengeView implements OnClickListener
 		if (textName != null){
 			textName.setText(challenge.getName());
 			progressBar.setProgress(challenge.getParticipants()[0].getProgress().getPercentage(challenge.getRepetition().getAmount()));
+			// VIDEO Hack
+			if(challenge instanceof ExerciseChallenge && challenge.getName().equals("Run 18 km"))
+			{
+				progressBar.setProgress(75);
+			}
 			textType.setText(challenge.getTypeName());
 			textUpperBound.setText(String.valueOf(challenge.getRepetition().getAmount()));
 			textLowerBound.setText("0");
@@ -345,6 +350,12 @@ public class ChallengeView implements OnClickListener
 
 				textUsername.setText(sortedParticipants.get(i).getName());
 				progressBar.setProgress(sortedParticipants.get(i).getProgress().getPercentage(challenge.getRepetition().getAmount()));
+				
+				// VIDEO Hack
+				if(challenge instanceof ExerciseChallenge && i == 0)
+				{
+					progressBar.setProgress(75);
+				}
 
 				/* Removed from prototype - no profile images
 				if(challenge.isActive())
@@ -454,6 +465,11 @@ public class ChallengeView implements OnClickListener
 					}
 					gpsData.put("owner", fullname);
 					gpsData.saveInBackground();
+					
+					//float length = (float) challenge.getRepetition().getAmount();
+					//float progress = (ro.getLength() / 1000) / length * 100;
+					int progressInt = Math.round(ro.getLength() / 1000);
+					Challenge.updateChallengeProgress(challenge.getName(), progressInt);
 				}
 			}
 			
