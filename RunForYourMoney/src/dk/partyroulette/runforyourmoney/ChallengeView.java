@@ -114,9 +114,9 @@ public class ChallengeView implements OnClickListener
 			time = (TextView) challengeView.findViewById(R.id.textTime);
 			length = (TextView) challengeView.findViewById(R.id.textLength);
 
-			avgPace.setText("Text Avg Pace");
-			time.setText("Text Time");
-			length.setText("Text Length");
+			avgPace.setText("Avg Pace: 0 min/km");
+			time.setText("Time: 00:00:00");
+			length.setText("0 km");
 
 			startButton = (Button) challengeView.findViewById(R.id.buttonStart);
 			startButton.setOnClickListener(this);
@@ -126,6 +126,14 @@ public class ChallengeView implements OnClickListener
 			debugButton.setOnClickListener(this);
 			
 			layoutChallenge.addView(challengeView);
+		}
+		else
+		{
+			View challengeView = inflater.inflate(R.layout.challenge_na_detail,
+					view, false);
+			layoutChallenge.addView(challengeView);
+			View layoutNA = view.findViewById(R.id.layoutNA);
+			layoutNA.setVisibility(View.VISIBLE);
 		}
 
 		// Participants view
@@ -141,6 +149,10 @@ public class ChallengeView implements OnClickListener
 
 			textUpperBound.setText(String.valueOf(challenge.getRepetition().getAmount()));
 			textLowerBound.setText("0");
+			
+			// Prototype specific - No profile images
+			ImageView imageParticipant = (ImageView) participantView.findViewById(R.id.imageParticipant);
+			imageParticipant.setImageResource(R.drawable.person);
 
 			layoutProgress.addView(participantView);
 			participantViews[i] = participantView;
@@ -328,10 +340,13 @@ public class ChallengeView implements OnClickListener
 				Bitmap bitmap;
 
 				ProgressBar progressBar = (ProgressBar) parents[i].findViewById(R.id.progressBar);
-				ImageView imageParticipant = (ImageView) parents[i].findViewById(R.id.imageParticipant);
+				TextView textUsername = (TextView) parents[i].findViewById(R.id.textUsername);
+				// ImageView imageParticipant = (ImageView) parents[i].findViewById(R.id.imageParticipant);
 
+				textUsername.setText(sortedParticipants.get(i).getName());
 				progressBar.setProgress(sortedParticipants.get(i).getProgress().getPercentage(challenge.getRepetition().getAmount()));
 
+				/* Removed from prototype - no profile images
 				if(challenge.isActive())
 				{
 					bitmap = bitmaps[i];
@@ -356,6 +371,8 @@ public class ChallengeView implements OnClickListener
 				}
 
 				imageParticipant.setImageBitmap(BitmapUtilities.roundCornersBitmap(Bitmap.createScaledBitmap(BitmapUtilities.cropBitmap(bitmap), size, size, true)));
+
+								*/
 			}
 		}
 

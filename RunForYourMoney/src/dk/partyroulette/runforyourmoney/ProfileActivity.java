@@ -53,7 +53,11 @@ public class ProfileActivity extends FragmentActivity implements RunListFragment
 			//
 			this.finish();
 			return true;
-		
+		case R.id.edit:
+			Intent intent = new Intent(this, NAActivity.class);
+			intent.putExtra("title", "Edit profile");
+			startActivity(intent);
+			return true;
 		}
 		
 		return super.onOptionsItemSelected(item);

@@ -1,26 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:padding="6dip" 
-    android:orientation="vertical">
-
-    <!-- Item Name -->
+    android:layout_height="fill_parent">
 
     <LinearLayout
-        android:id="@+id/layoutChallenge"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/layoutChallenge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+        </LinearLayout>
+
+        <ScrollView
+            android:id="@+id/scrollView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <LinearLayout
+            	android:id="@+id/layoutProgress"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/layoutNA"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
+        android:layout_height="match_parent"
+        android:background="#EEFFFFFF"
+        android:visibility="invisible" >
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Not\nAvailable"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#99CC00"
+            android:textColorHint="#99CC00"
+            android:textStyle="bold" />
 
-    <LinearLayout
-        android:id="@+id/layoutProgress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical" >
-
-    </LinearLayout>
-
-</LinearLayout>
+    </FrameLayout>
+</FrameLayout>

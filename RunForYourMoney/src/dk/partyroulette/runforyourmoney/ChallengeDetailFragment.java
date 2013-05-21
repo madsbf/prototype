@@ -85,7 +85,7 @@ public class ChallengeDetailFragment extends Fragment
 		//end run
 		if(challengeView != null)
 		{
-			challengeView.end();
+			challengeView.end(); 
 		}
 	}
 	

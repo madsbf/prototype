@@ -188,7 +188,7 @@ ChallengeListFragment.Callbacks, OverviewFragment.Callbacks
 				Intent detailIntent = new Intent(this,
 						AddChallengeActivity.class);
 				startActivity(detailIntent);
-				break;
+				return true;
 			case R.id.item2:
 				if(runObjects!=null)
 				{
@@ -196,7 +196,7 @@ ChallengeListFragment.Callbacks, OverviewFragment.Callbacks
 					intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
 					startActivity(intent);
 				}
-				break;
+				return true;
 			case R.id.item3:
 				if(runObjects!=null)
 				{
@@ -204,7 +204,12 @@ ChallengeListFragment.Callbacks, OverviewFragment.Callbacks
 					intent.putParcelableArrayListExtra("runObjects", (ArrayList<? extends Parcelable>) runObjects);
 					startActivity(intent);
 				}
-				break;
+				return true;
+			case R.id.item4:
+				Intent intent = new Intent(this, NAActivity.class);
+				intent.putExtra("title", "Find friends");
+				startActivity(intent);
+				return true;
 			}			
 		}
 		return true;

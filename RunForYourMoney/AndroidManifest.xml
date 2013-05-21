@@ -56,6 +56,15 @@
                 android:value=".ChallengeListActivity" />
         </activity>
         
+        <activity
+            android:name="dk.partyroulette.runforyourmoney.NAActivity"
+            android:label="Not available"
+            android:parentActivityName="dk.partyroulette.runforyourmoney.ChallengeListActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ChallengeListActivity" />
+        </activity>
+        
         <activity android:name="RunStatisticsActivity"></activity>
         <activity android:name="RunStasticsFragment"></activity>
         <activity android:name="ProfileActivity"></activity>
