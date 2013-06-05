@@ -188,10 +188,10 @@ public class ChallengeView implements OnClickListener
 			textName.setText(challenge.getName());
 			progressBar.setProgress(challenge.getParticipants()[0].getProgress().getPercentage(challenge.getRepetition().getAmount()));
 			// VIDEO Hack
-			if(challenge instanceof ExerciseChallenge && challenge.getName().equals("Run 18 km"))
+			/*if(challenge instanceof ExerciseChallenge && challenge.getName().equals("Run 18 km"))
 			{
 				progressBar.setProgress(75);
-			}
+			}*/
 			textType.setText(challenge.getTypeName());
 			textUpperBound.setText(String.valueOf(challenge.getRepetition().getAmount()));
 			textLowerBound.setText("0");
@@ -352,10 +352,10 @@ public class ChallengeView implements OnClickListener
 				progressBar.setProgress(sortedParticipants.get(i).getProgress().getPercentage(challenge.getRepetition().getAmount()));
 				
 				// VIDEO Hack
-				if(challenge instanceof ExerciseChallenge && i == 0)
+				/*if(challenge instanceof ExerciseChallenge && i == 0)
 				{
 					progressBar.setProgress(75);
-				}
+				}*/
 
 				/* Removed from prototype - no profile images
 				if(challenge.isActive())
